@@ -137,7 +137,8 @@ $(document).ready(function() {
 		<td>${c.school_year}</td>
 		<td>${c.school_term}</td>
 		<td>${c.credit}</td>
-		<td><fmt:formatNumber type="number" minIntegerDigits="2" value="${c.thour/60}" />:<fmt:formatNumber type="number" minIntegerDigits="2" value="${c.thour%60}" /></td>
+		<fmt:parseNumber var="t" type="number" value="${c.thour}" />
+		<td><fmt:formatNumber type="number" maxFractionDigits="0" value="${(t/60)-0.5}" />:<fmt:formatNumber type="number" minIntegerDigits="2" value="${c.thour%60}" /></td>
 		<td>${c.thour}</td>
 		<td><input type="text" name="thour_real" class="span1" value="${c.thour_real}" style="ime-mode:disabled" autocomplete="Off"/></td>
 		<td nowrap><span class="label label-info">${c.checked}</span></td>
