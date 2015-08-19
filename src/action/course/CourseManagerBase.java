@@ -360,7 +360,8 @@ public class CourseManagerBase extends BaseAction{
 	 * @return
 	 * @throws IOException 
 	 */
-	public String print() throws IOException{		
+	public String print() throws IOException{	
+		String Syear=getContext().getAttribute("school_year").toString();
 		switch(print) { 
 			//通用報表
         	case "ListDtime": ListDtime ld=new ListDtime();
@@ -382,22 +383,22 @@ public class CourseManagerBase extends BaseAction{
         	
         	//TimeTableClass
         	case "TimeTableClass": TimeTable timeTableClass=new TimeTable();
-        	timeTableClass.print(response, getDtimeOids(),null, null, null, Sterm, null);
+        	timeTableClass.print(response, getDtimeOids(),null, null, null, Syear, Sterm, null);
         	break;
         	
         	//TimeTableTeacher
         	case "TimeTableTeacher": timeTableClass=new TimeTable();
-        	timeTableClass.print(response, null, getDtimeOids(), null, null, Sterm, null);
+        	timeTableClass.print(response, null, getDtimeOids(), null, null, Syear, Sterm, null);
         	break;
         	
         	//TimeTableTeacherNonStay
         	case "TimeTableTeacherNonStay": timeTableClass=new TimeTable();
-        	timeTableClass.print(response, null, getDtimeOids(), null, null, Sterm, "1");
+        	timeTableClass.print(response, null, getDtimeOids(), null, null, Syear, Sterm, "1");
         	break;
         	
         	//TimeTableRoom
         	case "TimeTableRoom": timeTableClass=new TimeTable();
-        	timeTableClass.print(response, null, null, null, getDtimeOids(), Sterm, null);
+        	timeTableClass.print(response, null, null, null, getDtimeOids(), Syear, Sterm, null);
         	break;
         	
         	//coansw

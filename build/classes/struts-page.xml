@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <package name="publiclogin" extends="abstract_struts" namespace="/">				
+		<action name="Logout" class="action.Logout">
+			<result name="logout">/index.jsp</result>
+		</action>		
+	</package>
+	
+	<package name="rollCall" extends="abstract_struts" namespace="/">		
+		<action name="ForbidScoreList" class="action.ForbidScoreListAction">
+			<result>/jsp/ForbidScoreList.jsp</result>
+		</action>
+	</package>
+	
+	<package name="seld" extends="abstract_struts" namespace="/">		
+		
+		<action name="AddSeld" class="action.seld.AddSeldAction">
+			<result>/jsp/seld/AddSeld.jsp</result>
+		</action>
+		
+		<action name="AddSeldNext" class="action.seld.AddSeldNextAction">
+			<result>/jsp/seld/AddSeldNext.jsp</result>
+		</action>
+		
+		<action name="ElectiveManager" class="action.seld.ElectiveManagerAction">
+			<result>/jsp/seld/ElectiveManager.jsp</result>
+		</action>
+		
+		<action name="MergeSeld" class="action.seld.MergeSeldAction">
+			<result>/jsp/seld/MergeSeld.jsp</result>
+		</action>
+		
+		
+		
+	</package>
+	
+	<package name="coansw" extends="abstract_struts" namespace="/">		
+		<action name="CoanswManager" class="action.coansw.CoanswManager">
+			<result>/jsp/coansw/CoanswManager.jsp</result>
+			<result name="edit">/jsp/coansw/edit.jsp</result>			
+		</action>
+	</package>
+	
+	<package name="course" extends="abstract_struts" namespace="/">		
+		
+		<action name="CourseManager" class="action.course.CourseManagerAction">		    
+			<result>/jsp/course/CourseManager.jsp</result>
+			<result name="edit">/jsp/course/CourseManager/edit.jsp</result>
+			<result name="editMulTech">/jsp/course/CourseManager/editMulTech.jsp</result>			
+		</action>
+		
+		<action name="ReSetDtime" class="action.course.ReSetDtime">
+			<result>/jsp/course/ReSetDtime.jsp</result>
+		</action>
+		
+	</package>
+	
+	<package name="elearning" extends="abstract_struts" namespace="/">		
+		<action name="EleResManager" class="action.ele.EleResManagerAction">
+			<result>/jsp/elearning/EleResManager.jsp</result>
+		</action>
+	</package>
+
+</struts>

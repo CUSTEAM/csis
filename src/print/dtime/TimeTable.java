@@ -22,19 +22,19 @@ public class TimeTable extends BaseAction{
 		String nonStay=request.getParameter("nonStay");
 		
 		if(ClassNo!=null){
-			print(response, df.sqlGet("SELECT Oid FROM Dtime WHERE depart_class='"+ClassNo+"'"), null, null,null, getContext().getAttribute("school_term").toString(),null);			
+			print(response, df.sqlGet("SELECT Oid FROM Dtime WHERE depart_class='"+ClassNo+"'"), null, null,null, getContext().getAttribute("school_year").toString(), getContext().getAttribute("school_term").toString(),null);			
 		}
 		if(student_no!=null){
-			print(response, null, null, df.sqlGet("SELECT student_no FROM stmd WHERE student_no='"+student_no+"'"),null, getContext().getAttribute("school_term").toString(),null);			
+			print(response, null, null, df.sqlGet("SELECT student_no FROM stmd WHERE student_no='"+student_no+"'"),null, getContext().getAttribute("school_year").toString(), getContext().getAttribute("school_term").toString(),null);			
 		}
 		
 		//取單1教師
 		if(emplOid!=null){
-			print(response, null, df.sqlGet("SELECT Oid as emplOid FROM empl WHERE Oid="+emplOid),null, null, getContext().getAttribute("school_term").toString(),nonStay);			
+			print(response, null, df.sqlGet("SELECT Oid as emplOid FROM empl WHERE Oid="+emplOid),null, null, getContext().getAttribute("school_year").toString(), getContext().getAttribute("school_term").toString(),nonStay);			
 		}
 		
 		if(nabbr!=null){
-			print(response, null, null,null, df.sqlGet("SELECT room_id FROM Nabbr WHERE room_id='"+nabbr+"'"), getContext().getAttribute("school_term").toString(),null);			
+			print(response, null, null,null, df.sqlGet("SELECT room_id FROM Nabbr WHERE room_id='"+nabbr+"'"), getContext().getAttribute("school_year").toString(), getContext().getAttribute("school_term").toString(),null);			
 		}
 		
 		return null;
@@ -47,10 +47,11 @@ public class TimeTable extends BaseAction{
 	 * @param emplList
 	 * @param stdsList
 	 * @param nabbrList
+	 * @param Syear
 	 * @param Sterm
 	 * @throws IOException
 	 */
-	public void print(HttpServletResponse response,List<Map>dtimeList, List<Map>emplList, List<Map>stdsList, List<Map>nabbrList, String Sterm, String nonStay) throws IOException{
+	public void print(HttpServletResponse response,List<Map>dtimeList, List<Map>emplList, List<Map>stdsList, List<Map>nabbrList, String Syear, String Sterm, String nonStay) throws IOException{
 		
 		StringBuilder sb;
 		List<Map>list=new ArrayList();
@@ -1520,7 +1521,7 @@ public class TimeTable extends BaseAction{
 			out.println ("  <WorksheetOptions xmlns='urn:schemas-microsoft-com:office:excel'>");
 			out.println ("   <PageSetup>");
 			out.println ("    <Header x:Margin='0.3'");
-			out.println ("     x:Data='&amp;L&amp;&quot;微軟正黑體,標準&quot;&amp;24中華科技大學&amp;C&amp;&quot;微軟正黑體,粗體&quot;&amp;24 "+list.get(i).get("Name")+title+"&amp;R&amp;&quot;微軟正黑體,標準&quot;&amp;18 103學年度第"+Sterm+"學期'/>");
+			out.println ("     x:Data='&amp;L&amp;&quot;微軟正黑體,標準&quot;&amp;24中華科技大學&amp;C&amp;&quot;微軟正黑體,粗體&quot;&amp;24 "+list.get(i).get("Name")+title+"&amp;R&amp;&quot;微軟正黑體,標準&quot;&amp;18 "+Syear+"學年度第"+Sterm+"學期'/>");
 			out.println ("    <Footer x:Margin='0.3'");
 			out.println ("     x:Data='&amp;L&amp;&quot;微軟正黑體,標準&quot;課程數 "+list.get(i).get("cnt")+"&#10;總時數 "+list.get(i).get("thour")+"&#10;總學分 "+list.get(i).get("credit")+"&amp;R&amp;&quot;微軟正黑體,標準&quot;列印時間 &amp;D &amp;T&#10;&amp;10所有資料依相關單位期末留存為準'/>");
 			out.println ("    <PageMargins x:Bottom='1.0729166666666667' x:Left='0.25' x:Right='0.25'");

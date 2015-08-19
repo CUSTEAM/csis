@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <package name="DtimePrint" extends="abstract_struts" namespace="/">				
+		<action name="DtimeSelds" class="print.dtime.DtimeSelds">
+			<result name="success">null</result>
+		</action>	
+		
+		<action name="SylDoc" class="print.dtime.SylDoc">
+			<result name="success">null</result>
+		</action>
+		
+		<action name="IntorDoc" class="print.dtime.IntorDoc">
+			<result name="success">null</result>
+		</action>
+		
+		<action name="TimeTable" class="print.dtime.TimeTable">
+			<interceptor-ref name="defaultStack" />
+			<result name="success">null</result>
+		</action>
+			
+	</package>
+	
+	
+	
+	
+
+</struts>
