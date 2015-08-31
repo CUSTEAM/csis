@@ -75,7 +75,7 @@ function addTimeTable(){
 			<%@ include file="/jsp/course/CourseManager/BlockTable.jsp"%>
 			<div class="btn-group" style="padding-bottom:44px; padding-top:22px;">			    
 			    <button class="btn" onClick="$('#blockTmp').show('slow')" type="button">增加擋修欄位</button> 
-			    <button class="btn btn-danger demo" name="method:saveBlock">儲存擋修科目代碼</button>
+			    <button class="btn btn-danger" name="method:saveBlock">儲存擋修科目代碼</button>
 			</div>
 			</div>
 		</div>
