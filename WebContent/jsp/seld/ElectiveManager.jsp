@@ -33,7 +33,7 @@
 		<td nowrap>最後修改</td>
 	</tr>	
 	<c:forEach items="${l}" var="s">		
-	<tr>
+	<tr onClick="$('#Oid${s.Oid}').val('${s.Oid}');">
 		<td>
 		<select name="level" onChange="$('#Oid${s.Oid}').val('${s.Oid}');">
 			<option <c:if test="${s.level=='1'}">selected</c:if> value="1">第1階段</option>				

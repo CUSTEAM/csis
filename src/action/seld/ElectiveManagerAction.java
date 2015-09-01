@@ -43,10 +43,16 @@ public class ElectiveManagerAction extends BaseAction{
 					"end='"+end[i]+"', max='"+max[i]+"', min='"+min[i]+"', nor='"+nor[i]+"', idno='"+getSession().getAttribute("userid")+"', term='"+term[i]+"' "+
 					"WHERE Oid='"+Oid[i]+"'");
 					
+					System.out.println("UPDATE SYS_CALENDAR_ELECTIVE SET sel_min="+sel_min[i]+", level='"+level[i]+"', " +
+							"depart='"+depart[i]+"', grade='"+grade[i]+"', begin='"+begin[i]+"', " +
+							"end='"+end[i]+"', max='"+max[i]+"', min='"+min[i]+"', nor='"+nor[i]+"', idno='"+getSession().getAttribute("userid")+"', term='"+term[i]+"' "+
+							"WHERE Oid='"+Oid[i]+"'");
+					
+					
 				}catch(Exception e){
 					msg.setError("請檢查欄位");
 					this.savMessage(msg);
-					return SUCCESS;
+					return execute();
 				}		
 			}	
 		}
