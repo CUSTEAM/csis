@@ -35,8 +35,12 @@ public class MergeSeldAction extends BaseAction{
 		for(int i=0; i<dtimeOids.length; i++){
 			if(dtimeOids[i].indexOf(",")>0){
 				sum+=1;
-				df.exSql("UPDATE Seld SET Dtime_oid="+targetOid.substring(0, targetOid.indexOf(","))+
-				" WHERE Dtime_oid="+dtimeOids[i].substring(0, dtimeOids[i].indexOf(",")));//合併
+				//df.exSql("UPDATE Seld SET Dtime_oid="+targetOid.substring(0, targetOid.indexOf(","))+
+				//" WHERE Dtime_oid="+dtimeOids[i].substring(0, dtimeOids[i].indexOf(",")));//合併
+				df.exSql("INSERT INTO Seld(Dtime_oid, student_no)SELECT "+targetOid.substring(0, targetOid.indexOf(","))+", s.student_no FROM "
+				+ "Seld s WHERE s.Dtime_oid="+dtimeOids[i].substring(0, dtimeOids[i].indexOf(","))+" ON DUPLICATE KEY UPDATE Seld.Oid=Seld.Oid");
+				df.exSql("DELETE FROM Seld WHERE Dtime_oid="+dtimeOids[i].substring(0, dtimeOids[i].indexOf(",")));
+				
 				sql.append(dtimeOids[i].substring(0, dtimeOids[i].indexOf(","))+",");//載入結果
 				note.append(dtimeOids[i].substring(0, dtimeOids[i].indexOf(","))+",");//載入記錄
 				df.exSql("UPDATE Dtime SET Select_Limit=0 WHERE Oid="+dtimeOids[i].substring(0, dtimeOids[i].indexOf(",")));//變更人數上限
