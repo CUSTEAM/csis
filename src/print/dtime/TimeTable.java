@@ -128,15 +128,17 @@ public class TimeTable extends BaseAction{
 				+ "e1.idno=d.techid AND d.Sterm='"+Sterm+"'AND cs.cscode=d.cscode AND "
 				+ "c.ClassNo=d.depart_class AND d.Oid=dc.Dtime_oid AND e1.idno='"+list.get(i).get("No")+"'");
 				//多教師
-				tmp.addAll(df.sqlGet("SELECT c.ClassName, dc.week, dc.begin, dc.end, IFNULL(dc.place,'')as place,cs.chi_name,IFNULL(e.cname, '')as cname FROM "
-				+ "Dtime d, Dtime_teacher dt, empl e,Dtime_class dc, Class c, Csno cs, empl e1 WHERE dt.teach_id=e.idno AND "
-				+ "d.Oid=dt.Dtime_oid AND e1.idno=d.techid AND d.Sterm='"+Sterm+"'AND cs.cscode=d.cscode AND c.ClassNo=d.depart_class AND "
-				+ "d.Oid=dc.Dtime_oid AND dt.teach_id='"+list.get(i).get("No")+"'"));
+				tmp.addAll(df.sqlGet("SELECT c.ClassName, dc.week, dc.begin, dc.end, IFNULL(dc.place,'')as "
+				+ "place,cs.chi_name,IFNULL(e.cname, '')as cname FROM Dtime d, Dtime_teacher dt, Class c, "
+				+ "Dtime_class dc, empl e, Csno cs WHERE e.idno=dt.teach_id AND cs.cscode=d.cscode AND "
+				+ "c.ClassNo=d.depart_class AND dc.Dtime_oid=d.Oid AND d.Oid=dt.Dtime_oid AND dt.teach_id='"+list.get(i).get("No")+"'"));
+				
+				
 				//留校
 				if(nonStay==null){//課務專用報表
 					tmp.addAll(df.sqlGet("SELECT 'OFFICE HOUR'as chi_name,"
 					+ "e.week,e.period as begin,e.period as end,IFNULL(ep.place,'未設定地點')as place, (CASE WHEN e.kind='1'THEN '課後輔導'ELSE '生活輔導'END )as ClassName, ''as cname FROM Empl_stay_info e LEFT OUTER "
-					+ "JOIN Empl_stay_place ep ON e.idno=ep.idno WHERE e.idno='"+list.get(i).get("No")+"'"));	
+					+ "JOIN Empl_stay_place ep ON e.idno=ep.idno WHERE e.school_term='"+Sterm+"'AND e.school_year='"+Syear+"' AND e.idno='"+list.get(i).get("No")+"'"));	
 				}
 				list.get(i).put("cs", tmp);
 				
