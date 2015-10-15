@@ -75,6 +75,8 @@ public class CourseManagerBase extends BaseAction{
 		for(int i=0; i<stds.length; i++){
 			if(!techids[i].trim().equals("")){
 				df.exSql("UPDATE Seld SET Dtime_teacher='"+techids[i]+"'WHERE Oid="+stds[i]);
+			}else{
+				df.exSql("UPDATE Seld SET Dtime_teacher=null WHERE Oid="+stds[i]);
 			}
 		}		
 		return editMulTech();
@@ -631,6 +633,7 @@ public class CourseManagerBase extends BaseAction{
 		for(int i=0; i<cidno.length; i++){
 			if(!cidno[i].equals("")&&!sidno[i].equals("")&&!didno[i].equals("")&&!grade[i].equals("")&&!classes[i].equals("")){
 				try{
+					System.out.println("INSERT INTO Dtime_cross(Cidno, Sidno, Didno, Grade, ClassNo, Dtime_oid)VALUES('"+cidno[i]+"', '"+sidno[i]+"', '"+didno[i]+"', '"+grade[i]+"', '"+classes[i]+"', "+Dtime_oid+")");
 					df.exSql("INSERT INTO Dtime_cross(Cidno, Sidno, Didno, Grade, ClassNo, Dtime_oid)VALUES('"+cidno[i]+"', '"+sidno[i]+"', '"+didno[i]+"', '"+grade[i]+"', '"+classes[i]+"', "+Dtime_oid+")");
 				}catch(Exception e){
 					msg.setError("跨選規則重複");
@@ -787,7 +790,7 @@ public class CourseManagerBase extends BaseAction{
 	
 	public String assignSeld;
 	/**
-	 * assign all seld for only techid
+	 * assign all seld for only techid;
 	 * @return
 	 */
 	public String assignSeld(){
