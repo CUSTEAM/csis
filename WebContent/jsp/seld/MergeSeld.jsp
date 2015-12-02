@@ -79,7 +79,7 @@
 </script>
 </head>
 <body>
-<div class="alert">
+<div class="alert alert alert-warning" role="alert">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>本學期併班選課管理</strong>    
 </div>

@@ -49,7 +49,7 @@ $(document).ready(function() {
 <body>
     
     
-<div class="alert">
+<div class="alert alert alert-warning" role="alert">
 <button type="button" class="close" data-dismiss="alert">&times;</button>
 <strong>課程規劃審核</strong>
 </div>

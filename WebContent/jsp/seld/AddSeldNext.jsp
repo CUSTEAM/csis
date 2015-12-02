@@ -112,7 +112,7 @@ function getSeldHist(stdNo){
 <button class="btn" data-dismiss="modal" aria-hidden="true">關閉</button>
 </div>
 </div>
-<div class="alert">
+<div class="alert alert alert-warning" role="alert">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>第2學期選課管理</strong>    
 </div>
@@ -201,7 +201,7 @@ function getSeldHist(stdNo){
 </table>
 </c:if>
 <c:if test="${!empty sumCredit}">
-<div class="alert">個人學分: ${sumCredit.credit}, 時數: ${sumCredit.thour} <a href="#seldInfo" data-toggle="modal" onClick="getSeldHist($('#stdNo').val())" >查看選課歷程</a></div>
+<div class="alert alert alert-warning" role="alert">個人學分: ${sumCredit.credit}, 時數: ${sumCredit.thour} <a href="#seldInfo" data-toggle="modal" onClick="getSeldHist($('#stdNo').val())" >查看選課歷程</a></div>
 </c:if>
 
 

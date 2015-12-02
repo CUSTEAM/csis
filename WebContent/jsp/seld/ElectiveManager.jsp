@@ -10,7 +10,7 @@
 <link href="/eis/inc/css/jquery-ui.css" rel="stylesheet"/>
 </head>
 <body>
-<div class="alert"><b>網路選課設定</b><br>
+<div class="alert alert alert-warning" role="alert"><b>網路選課設定</b><br>
 ● 第1階段不限制人數上限、第2階段開始限制人數上限(先選先贏)<br>
 ● 於第2學期開學時間內<b>設定第1學期的情況下</b>，學生自動升級為課程對應年級
 </div>

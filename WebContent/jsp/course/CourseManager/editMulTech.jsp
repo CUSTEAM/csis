@@ -16,7 +16,7 @@
 </head>
 <body>
 <form action="CourseManager" method="post" class="form-inline">
-<div class="alert">
+<div class="alert alert alert-warning" role="alert">
    	 正在修改 <strong>${dtime.Oid}, ${dtime.ClassName}, ${dtime.chi_name}</strong>     
     <div class="btn-group">	    
 		<button class="btn btn-small" name="method:edit">返回課程</button>

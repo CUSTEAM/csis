@@ -25,17 +25,18 @@
 $.ajaxSetup ({ 
 	cache: false 
 });
+/*
 window.onbeforeunload = function() {
 	$.unblockUI();
 };
-
+*/
 $(document).ready(function() {
-	$("#ActLink").click(function() {
+	/*$("#ActLink").click(function() {
 		$.blockUI({
 			message : null,
 			onOverlayClick : $.unblockUI
 		});
-	});
+	});*/
 	//$.get("/eis/jsp/decorators/menu.jsp?"+Math.random(),function(data){
 		//$("#mainmenu").html(data);
 	//});	

@@ -48,7 +48,7 @@ $(document).ready(function() {
 <body>
     
     
-<div class="alert">
+<div class="alert alert alert-warning" role="alert">
 <button type="button" class="close" data-dismiss="alert">&times;</button>
 <strong>1/3缺課名單列印</strong> 名單於學務單位結算操行成績時建立 
 
