@@ -130,7 +130,7 @@ public class TimeTable extends BaseAction{
 				//多教師
 				tmp.addAll(df.sqlGet("SELECT c.ClassName, dc.week, dc.begin, dc.end, IFNULL(dc.place,'')as "
 				+ "place,cs.chi_name,IFNULL(e.cname, '')as cname FROM Dtime d, Dtime_teacher dt, Class c, "
-				+ "Dtime_class dc, empl e, Csno cs WHERE e.idno=dt.teach_id AND cs.cscode=d.cscode AND "
+				+ "Dtime_class dc, empl e, Csno cs WHERE e.idno=dt.teach_id AND cs.cscode=d.cscode AND d.Sterm='"+Sterm+"'AND "
 				+ "c.ClassNo=d.depart_class AND dc.Dtime_oid=d.Oid AND d.Oid=dt.Dtime_oid AND dt.teach_id='"+list.get(i).get("No")+"'"));
 				
 				
