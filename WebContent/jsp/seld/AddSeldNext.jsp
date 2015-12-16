@@ -10,6 +10,7 @@
 <script src="/eis/inc/js/plugin/jquery-ui.js"></script>
 <script src="/eis/inc/js/plugin/bootstrap-tooltip.js"></script>
 <link href="/eis/inc/css/jquery-ui.css" rel="stylesheet"/>
+<script src="/eis/inc/js/plugin/stupidtable.min.js"></script>
 <style>
     body .modal {
     /* new custom width */
@@ -155,19 +156,21 @@ function getSeldHist(stdNo){
 </table>
 <input type="hidden" name="Oid" value="" id="Oid"/>
 <c:if test="${!empty css}">
-<table class="table table-hover">
-	<tr>
-		<td class="text-info" nowrap>課程編號</td>
-		<td class="text-info" nowrap>開課班級</td>
-		<td class="text-info" nowrap>課程名稱</td>
-		<td class="text-info" nowrap>授課教師</td>
-		<td class="text-info" nowrap>選別</td>
-		<td class="text-info" nowrap>學分</td>
-		<td class="text-info" nowrap>時數</td>
-		<td class="text-info" nowrap>已選/上限</td>
-		<td class="text-info"></td>
-		<td class="text-info"></td>
-	</tr>
+<table class="table table-hover" id="row">
+	<thead>
+		<tr>
+			<th nowrap>課程編號 </th>
+			<th nowrap data-sort="string" style="cursor:n-resize;">開課班級 <i class="icon-chevron-down"></i></th>
+			<th nowrap data-sort="string" style="cursor:n-resize;">課程名稱 <i class="icon-chevron-down"></i></th>
+			<th nowrap data-sort="string" style="cursor:n-resize;">授課教師 <i class="icon-chevron-down"></i></th>
+			<th nowrap data-sort="string" style="cursor:n-resize;">選別 <i class="icon-chevron-down"></i></th>
+			<th nowrap data-sort="string" style="cursor:n-resize;">學分 <i class="icon-chevron-down"></i></th>
+			<th nowrap data-sort="string" style="cursor:n-resize;">時數 <i class="icon-chevron-down"></i></th>
+			<th nowrap data-sort="string" style="cursor:n-resize;">已選/上限 <i class="icon-chevron-down"></i></th>
+			<th nowrap></th>
+			<th nowrap></th>
+		</tr>
+	</thead>
 	<c:forEach items="${css}" var="c">
 	<tr>
 		<td class="text-info" nowrap>${c.Oid}</td>
@@ -199,6 +202,9 @@ function getSeldHist(stdNo){
 	</tr>
 	</c:forEach>
 </table>
+<script>
+$("#row").stupidtable();
+</script>
 </c:if>
 <c:if test="${!empty sumCredit}">
 <div class="alert alert alert-warning" role="alert">個人學分: ${sumCredit.credit}, 時數: ${sumCredit.thour} <a href="#seldInfo" data-toggle="modal" onClick="getSeldHist($('#stdNo').val())" >查看選課歷程</a></div>
