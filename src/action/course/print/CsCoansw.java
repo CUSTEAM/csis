@@ -2,6 +2,7 @@ package action.course.print;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +10,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import action.BaseAction;
-import action.course.CourseManagerBase;
 
 /**
  * 教學評量
@@ -18,9 +18,9 @@ import action.course.CourseManagerBase;
  */
 public class CsCoansw extends BaseAction{
 	
-	public void print(HttpServletResponse response, List<Map>list) throws IOException{		
-		recount();
+	public void print(HttpServletResponse response, List<Map>list, String year, String term) throws IOException{		
 		Date date=new Date();
+		SimpleDateFormat sf=new SimpleDateFormat("yyyy/MM/dd HH:mm");
 		response.setContentType("application/vnd.ms-excel; charset=UTF-8");
 		response.setHeader("Content-disposition","attachment;filename="+date.getTime()+".xls");			
 		PrintWriter out=response.getWriter();		
@@ -196,9 +196,9 @@ public class CsCoansw extends BaseAction{
 			System.out.println(Float.parseFloat( list.get(i).get("coansw").toString() )       /samples);
 			coansw=50+(  Float.parseFloat( list.get(i).get("coansw").toString() )       /samples)*10;
 			
-			if(Float.parseFloat( list.get(i).get("coansw").toString() )/samples<2){
-				System.out.println(50+(  Float.parseFloat( list.get(i).get("coansw").toString() )/samples)*10);
-			}
+			/*if(Float.parseFloat( list.get(i).get("coansw").toString() )/samples<2){
+				System.out.println(50+(  (Float.parseFloat( list.get(i).get("coansw").toString() )/samples)*10    );
+			}*/
 				
 			if(samples>0){
 				if(coansw>=90)a+=1;
@@ -206,7 +206,7 @@ public class CsCoansw extends BaseAction{
 				if(coansw>=70&&coansw<80)c+=1;
 				if(coansw<70)d+=1;
 				out.println ("    <Cell><Data ss:Type='String'>"+samples+"</Data></Cell>");
-				out.println ("    <Cell><Data ss:Type='String'>"+coansw+"</Data></Cell>");
+				out.println ("    <Cell><Data ss:Type='String'>"+Math.rint(coansw*100)/100+"</Data></Cell>");
 			}else{
 				out.println ("    <Cell><Data ss:Type='String'></Data></Cell>");
 				out.println ("    <Cell><Data ss:Type='String'></Data></Cell>");
@@ -219,8 +219,8 @@ public class CsCoansw extends BaseAction{
 		out.println ("  <WorksheetOptions xmlns='urn:schemas-microsoft-com:office:excel'>");
 		out.println ("   <PageSetup>");
 		out.println ("    <Header x:Margin='0.31496062992125984'");
-		out.println ("     x:Data='&amp;C&amp;&quot;標楷體,粗體&quot;&amp;18中華科技大學"+getSession().getAttribute("editYear")+"學年 第"+getSession().getAttribute("editSterm")+"學期 課程學習滿意度調查統計表'/>");
-		out.println ("    <Footer x:Margin='0.31496062992125984' x:Data='&amp;L2014/4/3 10:05&amp;R&amp;P/&amp;N'/>");
+		out.println ("     x:Data='&amp;C&amp;&quot;標楷體,粗體&quot;&amp;18中華科技大學"+year+"學年 第"+term+"學期 課程學習滿意度調查統計表'/>");
+		out.println ("    <Footer x:Margin='0.31496062992125984' x:Data='&amp;L"+sf.format(date)+"&amp;R&amp;P/&amp;N'/>");
 		out.println ("    <PageMargins x:Bottom='0.74803149606299213' x:Left='0.23622047244094491'");
 		out.println ("     x:Right='0.23622047244094491' x:Top='0.74803149606299213'/>");
 		out.println ("   </PageSetup>");
@@ -356,7 +356,7 @@ public class CsCoansw extends BaseAction{
 				if(coansw>=70&&coansw<80)c+=1;
 				if(coansw<70)d+=1;
 				out.println ("    <Cell><Data ss:Type='String'>"+samples+"</Data></Cell>");
-				out.println ("    <Cell><Data ss:Type='String'>"+coansw+"</Data></Cell>");
+				out.println ("    <Cell><Data ss:Type='String'>"+Math.rint(coansw*100)/100+"</Data></Cell>");
 			}else{
 				out.println ("    <Cell><Data ss:Type='String'></Data></Cell>");
 				out.println ("    <Cell><Data ss:Type='String'></Data></Cell>");
@@ -369,8 +369,8 @@ public class CsCoansw extends BaseAction{
 		out.println ("  <WorksheetOptions xmlns='urn:schemas-microsoft-com:office:excel'>");
 		out.println ("   <PageSetup>");
 		out.println ("    <Header x:Margin='0.31496062992125984'");
-		out.println ("     x:Data='&amp;C&amp;&quot;標楷體,粗體&quot;&amp;18中華科技大學"+getSession().getAttribute("editYear")+"學年 第"+getSession().getAttribute("editSterm")+"學期 課程學習滿意度調查統計表'/>");
-		out.println ("    <Footer x:Margin='0.31496062992125984' x:Data='&amp;L2014/4/3 10:05&amp;R&amp;P/&amp;N'/>");
+		out.println ("     x:Data='&amp;C&amp;&quot;標楷體,粗體&quot;&amp;18中華科技大學"+year+"學年 第"+term+"學期 課程學習滿意度調查統計表'/>");
+		out.println ("    <Footer x:Margin='0.31496062992125984' x:Data='&amp;L"+sf.format(date)+"&amp;R&amp;P/&amp;N'/>");
 		out.println ("    <PageMargins x:Bottom='0.74803149606299213' x:Left='0.23622047244094491'");
 		out.println ("     x:Right='0.23622047244094491' x:Top='0.74803149606299213'/>");
 		out.println ("   </PageSetup>");
@@ -525,8 +525,8 @@ public class CsCoansw extends BaseAction{
 		out.println ("  <WorksheetOptions xmlns='urn:schemas-microsoft-com:office:excel'>");
 		out.println ("   <PageSetup>");
 		out.println ("    <Header x:Margin='0.31496062992125984'");
-		out.println ("     x:Data='&amp;C&amp;&quot;標楷體,粗體&quot;&amp;18中華科技大學"+getSession().getAttribute("editYear")+"學年 第"+getSession().getAttribute("editSterm")+"學期 課程學習滿意度調查統計表'/>");
-		out.println ("    <Footer x:Margin='0.31496062992125984' x:Data='&amp;L2014/4/3 10:05&amp;R&amp;P/&amp;N'/>");
+		out.println ("     x:Data='&amp;C&amp;&quot;標楷體,粗體&quot;&amp;18中華科技大學"+year+"學年 第"+term+"學期 課程學習滿意度調查統計表'/>");
+		out.println ("    <Footer x:Margin='0.31496062992125984' x:Data='&amp;L"+sf.format(date)+"&amp;R&amp;P/&amp;N'/>");
 		out.println ("    <PageMargins x:Bottom='0.74803149606299213' x:Left='0.23622047244094491'");
 		out.println ("     x:Right='0.23622047244094491' x:Top='0.74803149606299213'/>");
 		out.println ("   </PageSetup>");
@@ -575,7 +575,7 @@ public class CsCoansw extends BaseAction{
 		out.flush();		
 	}
 	
-	private void recount(){
+	/*private void recount(){
 		
 		//初始作業
 		df.exSql("UPDATE Dtime SET effsamples=0, samples=0, coansw=0");
@@ -616,7 +616,7 @@ public class CsCoansw extends BaseAction{
 			}			
 		}		
 	
-	}
+	}*/
 	
 	private Float sum(String ans){		
 		int s=0;

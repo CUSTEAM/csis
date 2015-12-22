@@ -405,7 +405,7 @@ public class CourseManagerBase extends BaseAction{
         	
         	//coansw
         	case "CsCoansw": CsCoansw coansw=new CsCoansw();
-        	coansw.print(response, getDtimeOids());
+        	coansw.print(response, getDtimeOids(), getContext().getAttribute("school_year").toString(), Sterm);
         	break;
         	
         	//StuSeltable
