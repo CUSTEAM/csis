@@ -616,7 +616,7 @@ public class CsCoansw extends BaseAction{
 			}			
 		}		
 	
-	}*/
+	}
 	
 	private Float sum(String ans){		
 		int s=0;
@@ -625,4 +625,5 @@ public class CsCoansw extends BaseAction{
 		}		
 		return (float)s/ans.length();
 	}
+	*/
 }
