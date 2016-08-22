@@ -18,14 +18,14 @@ ${close}
 		</td>
 		<td>
 		<select name="begin" onChange="checkTime()">
-			<c:forEach begin="1" end="14" var="b">
+			<c:forEach begin="1" end="28" var="b">
 			<option <c:if test="${d.begin eq b}">selected</c:if> value="${b}">第${b}節</option>
 			</c:forEach>
 		</select>				
 		</td>
 		<td>
 		<select name="end" onChange="checkTime()">
-			<c:forEach begin="1" end="14" var="e">
+			<c:forEach begin="1" end="28" var="e">
 			<option <c:if test="${d.end eq e}">selected</c:if> value="${e}">第${e}節</option>
 			</c:forEach>
 		</select>

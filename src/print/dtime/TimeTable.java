@@ -11,8 +11,17 @@ import javax.servlet.http.HttpServletResponse;
 
 import action.BaseAction;
 
+/**
+ * 班級、教室、教師、學生等公用課表
+ * TODO 2016/8/22 為進修部修改為28節顯示與相關細部判斷邏輯, 強烈建議儘快恢復原先版本或新建公用課表程式
+ * @author shawn
+ *
+ */
 public class TimeTable extends BaseAction{
 	
+	/**
+	 * TODO 
+	 */
 	public String execute() throws IOException{
 		
 		String ClassNo=request.getParameter("ClassNo");
@@ -816,11 +825,8 @@ public class TimeTable extends BaseAction{
 		out.println ("  </Style>");
 		out.println (" </Styles>");
 		
-		//int size;
-		for(int i=0; i<list.size(); i++){
-			//size=list.get(i).get("name").toString().length();
-			//if(size>4)size=4;
-			//out.println (" <Worksheet ss:Name='"+list.get(i).get("name").toString().substring(0, size)+"'>");
+		boolean extra;//15節標記
+		for(int i=0; i<list.size(); i++){			
 			out.println (" <Worksheet ss:Name='"+list.get(i).get("name")+"'>");
 			out.println ("  <Table ss:ExpandedColumnCount='9' ss:ExpandedRowCount='17' x:FullColumns='1'");
 			out.println ("   x:FullRows='1' ss:StyleID='s57' ss:DefaultColumnWidth='54'");
@@ -841,14 +847,15 @@ public class TimeTable extends BaseAction{
 			out.println ("    <Cell ss:StyleID='s55'><Data ss:Type='String'>星期日</Data></Cell>");
 			out.println ("   </Row>");
 			
-			
 			tmp=(List) list.get(i).get("cs");
-			
+			extra=false;
 			//1-1
 			out.println ("   <Row ss:AutoFitHeight='0' ss:Height='51.75'>");
 			out.println ("    <Cell ss:StyleID='s105'><Data ss:Type='String'>1</Data></Cell>");			
 			out.println ("<Cell ss:StyleID='s28'><Data ss:Type='String'>");
 			for(int j=0; j<tmp.size(); j++){
+				//超過15節標記
+				if(Integer.parseInt(tmp.get(j).get("end").toString())>=15)extra=true;
 				if(tmp.get(j).get("week").toString().equals("1")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=1 && 1<=Integer.parseInt(tmp.get(j).get("end").toString())){
 					out.println (tmp.get(j).get("chi_name")+"&#10;");
 					if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
@@ -1541,9 +1548,765 @@ public class TimeTable extends BaseAction{
 			out.println ("  </WorksheetOptions>");
 			out.println (" </Worksheet>");
 			
+			
+			
+			
+			
+			extraPrint(out,Syear, Sterm, list.get(i).get("Name")+title, tmp, dtimeList, emplList, nabbrList, stdsList);
+			
+			
+			
+			
+			
+			
+			
 		}		
+		
+		
+		
 		out.println ("</Workbook>");
 		out.println ("");
+	}
+	
+	private void extraPrint(PrintWriter out,String Syear, String Sterm, String name, List<Map>tmp, List dtimeList, List emplList, List nabbrList, List stdsList){
+		
+		
+		
+		out.println (" <Worksheet ss:Name='"+name+"-1'>");
+		out.println ("  <Table ss:ExpandedColumnCount='9' ss:ExpandedRowCount='17' x:FullColumns='1'");
+		out.println ("   x:FullRows='1' ss:StyleID='s57' ss:DefaultColumnWidth='54'");
+		out.println ("   ss:DefaultRowHeight='15.75'>");
+		out.println ("   <Column ss:StyleID='s57' ss:AutoFitWidth='0' ss:Width='15'/>");
+		out.println ("   <Column ss:StyleID='s57' ss:AutoFitWidth='0' ss:Width='80.25' ss:Span='4'/>");
+		out.println ("   <Column ss:Index='7' ss:StyleID='s57' ss:AutoFitWidth='0' ss:Width='15'/>");
+		out.println ("   <Column ss:StyleID='s57' ss:AutoFitWidth='0' ss:Width='80.25' ss:Span='1'/>");
+		out.println ("   <Row ss:Height='19.5' ss:StyleID='s56'>");
+		out.println ("    <Cell ss:StyleID='s53'/>");
+		out.println ("    <Cell ss:StyleID='s54'><Data ss:Type='String'>星期一</Data></Cell>");
+		out.println ("    <Cell ss:StyleID='s54'><Data ss:Type='String'>星期二</Data></Cell>");
+		out.println ("    <Cell ss:StyleID='s54'><Data ss:Type='String'>星期三</Data></Cell>");
+		out.println ("    <Cell ss:StyleID='s54'><Data ss:Type='String'>星期四</Data></Cell>");
+		out.println ("    <Cell ss:StyleID='s54'><Data ss:Type='String'>星期五</Data></Cell>");
+		out.println ("    <Cell ss:StyleID='s54'/>");
+		out.println ("    <Cell ss:StyleID='s55'><Data ss:Type='String'>星期六</Data></Cell>");
+		out.println ("    <Cell ss:StyleID='s55'><Data ss:Type='String'>星期日</Data></Cell>");
+		out.println ("   </Row>");
+		
+		
+		
+		//1-1
+		out.println ("   <Row ss:AutoFitHeight='0' ss:Height='51.75'>");
+		out.println ("    <Cell ss:StyleID='s105'><Data ss:Type='String'>15</Data></Cell>");			
+		out.println ("<Cell ss:StyleID='s28'><Data ss:Type='String'>");
+		
+		for(int j=0; j<tmp.size(); j++){			
+			if(tmp.get(j).get("week").toString().equals("1")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=15 && 15<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+				//tmp.remove(j);
+			}
+		}
+		out.println ("</Data></Cell>");			
+		out.println ("<Cell ss:StyleID='s29'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("2")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=15 && 15<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");			
+		out.println ("<Cell ss:StyleID='s29'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("3")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=15 && 15<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");			
+		out.println ("<Cell ss:StyleID='s29'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("4")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=15 && 15<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");			
+		out.println ("<Cell ss:StyleID='s30'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("5")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=15 && 15<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("    <Cell ss:StyleID='s16'><Data ss:Type='String'>1</Data></Cell>");			
+		out.println ("<Cell ss:StyleID='s28'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("6")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=15 && 15<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s106'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("7")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=15 && 15<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("   </Row>");
+		
+		//16-22
+		for(int k=16; k<=22; k++){
+			out.println ("   <Row ss:AutoFitHeight='0' ss:Height='51.75'>");
+			out.println ("    <Cell ss:StyleID='s107'><Data ss:Type='String'>"+k+"</Data></Cell>");
+			
+			out.println ("<Cell ss:StyleID='s32'><Data ss:Type='String'>");
+			for(int j=0; j<tmp.size(); j++){
+				if(tmp.get(j).get("week").toString().equals("1")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=k && k<=Integer.parseInt(tmp.get(j).get("end").toString())){
+					out.println (tmp.get(j).get("chi_name")+"&#10;");
+					if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+					//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+					if(emplList==null)out.println (tmp.get(j).get("cname"));
+					if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+				}
+			}
+			out.println ("</Data></Cell>");
+			
+			out.println ("<Cell ss:StyleID='s33'><Data ss:Type='String'>");
+			for(int j=0; j<tmp.size(); j++){
+				if(tmp.get(j).get("week").toString().equals("2")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=k && k<=Integer.parseInt(tmp.get(j).get("end").toString())){
+					out.println (tmp.get(j).get("chi_name")+"&#10;");
+					if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+					//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+					if(emplList==null)out.println (tmp.get(j).get("cname"));
+					if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+				}
+			}
+			out.println ("</Data></Cell>");
+			out.println ("<Cell ss:StyleID='s34'><Data ss:Type='String'>");
+			for(int j=0; j<tmp.size(); j++){
+				if(tmp.get(j).get("week").toString().equals("3")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=k && k<=Integer.parseInt(tmp.get(j).get("end").toString())){
+					out.println (tmp.get(j).get("chi_name")+"&#10;");
+					if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+					//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+					if(emplList==null)out.println (tmp.get(j).get("cname"));
+					if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+				}
+			}
+			out.println ("</Data></Cell>");
+			out.println ("<Cell ss:StyleID='s34'><Data ss:Type='String'>");
+			for(int j=0; j<tmp.size(); j++){
+				if(tmp.get(j).get("week").toString().equals("4")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=k && k<=Integer.parseInt(tmp.get(j).get("end").toString())){
+					out.println (tmp.get(j).get("chi_name")+"&#10;");
+					if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+					//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+					if(emplList==null)out.println (tmp.get(j).get("cname"));
+					if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+				}
+			}
+			out.println ("</Data></Cell>");
+			out.println ("<Cell ss:StyleID='s35'><Data ss:Type='String'>");
+			for(int j=0; j<tmp.size(); j++){
+				if(tmp.get(j).get("week").toString().equals("5")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=k && k<=Integer.parseInt(tmp.get(j).get("end").toString())){
+					out.println (tmp.get(j).get("chi_name")+"&#10;");
+					if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+					//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+					if(emplList==null)out.println (tmp.get(j).get("cname"));
+					if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+				}
+			}
+			out.println ("</Data></Cell>");
+			out.println ("    <Cell ss:StyleID='s17'><Data ss:Type='String'>"+k+"</Data></Cell>");
+			out.println ("<Cell ss:StyleID='s32'><Data ss:Type='String'>");
+			for(int j=0; j<tmp.size(); j++){
+				if(tmp.get(j).get("week").toString().equals("6")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=k && k<=Integer.parseInt(tmp.get(j).get("end").toString())){
+					out.println (tmp.get(j).get("chi_name")+"&#10;");
+					if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+					//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+					if(emplList==null)out.println (tmp.get(j).get("cname"));
+					if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+				}
+			}
+			out.println ("</Data></Cell>");
+			out.println ("<Cell ss:StyleID='s108'><Data ss:Type='String'>");
+			for(int j=0; j<tmp.size(); j++){
+				if(tmp.get(j).get("week").toString().equals("7")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=k && k<=Integer.parseInt(tmp.get(j).get("end").toString())){
+					out.println (tmp.get(j).get("chi_name")+"&#10;");
+					if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+					//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+					if(emplList==null)out.println (tmp.get(j).get("cname"));
+					if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+				}
+			}
+			out.println ("</Data></Cell>");
+			out.println ("   </Row>");
+		}
+		
+		//23-23			
+		out.println ("   <Row ss:AutoFitHeight='0' ss:Height='51.75'>");
+		out.println ("    <Cell ss:StyleID='s109'><Data ss:Type='String'>23</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s37'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("1")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=23 && 23<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s38'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("2")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=23 && 23<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s38'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("3")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=23 && 23<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s38'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("4")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=23 && 23<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s39'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("5")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=23 && 23<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("    <Cell ss:StyleID='s17'><Data ss:Type='String'>9</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s32'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("6")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=23 && 23<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s108'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("7")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=23 && 23<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("   </Row>");
+		
+		//24-24
+		out.println ("   <Row ss:AutoFitHeight='0' ss:Height='51.75'>");
+		out.println ("    <Cell ss:StyleID='s110'><Data ss:Type='String'>24</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s40'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("1")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=24 && 24<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s41'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("2")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=24 && 24<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s41'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("3")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=24 && 24<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s41'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("4")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=24 && 24<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s42'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("5")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=24 && 24<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("    <Cell ss:StyleID='s17'><Data ss:Type='String'>10</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s32'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("6")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=24 && 24<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s108'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("7")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=24 && 24<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("   </Row>");
+		
+		//11-11
+		out.println ("   <Row ss:AutoFitHeight='0' ss:Height='51.75'>");
+		out.println ("    <Cell ss:StyleID='s111'><Data ss:Type='String'>25</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s43'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("1")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=25 && 25<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s33'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("2")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=25 && 25<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s33'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("3")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=25 && 25<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s33'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("4")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=25 && 25<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s44'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("5")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=25 && 25<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("    <Cell ss:StyleID='s17'><Data ss:Type='String'>11</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s32'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("6")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=25 && 25<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s108'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("7")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=25 && 25<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("   </Row>");
+		
+		//26-26
+		out.println ("   <Row ss:AutoFitHeight='0' ss:Height='51.75'>");
+		out.println ("    <Cell ss:StyleID='s112'><Data ss:Type='String'>26</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s32'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("1")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=26 && 26<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s33'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("2")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=26 && 26<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s34'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("3")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=26 && 26<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s34'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("4")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=26 && 26<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s35'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("5")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=26 && 26<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("    <Cell ss:StyleID='s18'><Data ss:Type='String'>12</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s45'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("6")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=26 && 26<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s113'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("7")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=26 && 26<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("   </Row>");
+		
+		//27-27
+		out.println ("   <Row ss:AutoFitHeight='0' ss:Height='51.75'>");
+		out.println ("    <Cell ss:StyleID='s112'><Data ss:Type='String'>27</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s32'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("1")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=27 && 27<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s33'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("2")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=27 && 27<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s34'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("3")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=27 && 27<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s34'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("4")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=27 && 27<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s35'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("5")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=27 && 27<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("    <Cell ss:StyleID='s18'><Data ss:Type='String'>13</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s45'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("6")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=27 && 27<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s113'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("7")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=27 && 27<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("   </Row>");
+		
+		//28-28
+		out.println ("   <Row ss:AutoFitHeight='0' ss:Height='51.75'>");
+		out.println ("    <Cell ss:StyleID='s115'><Data ss:Type='String'>28</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s48'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("1")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=28 && 28<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s49'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("2")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=28 && 28<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s50'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("3")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=28 && 28<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s50'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("4")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=28 && 28<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s51'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("5")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=28 && 28<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("    <Cell ss:StyleID='s20'><Data ss:Type='String'>14</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s48'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("6")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=28 && 28<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null)out.println (tmp.get(j).get("ClassName")+"&#10;");else out.println (tmp.get(j).get("Oid")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("<Cell ss:StyleID='s116'><Data ss:Type='String'>");
+		for(int j=0; j<tmp.size(); j++){
+			if(tmp.get(j).get("week").toString().equals("7")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=28 && 28<=Integer.parseInt(tmp.get(j).get("end").toString())){
+				out.println (tmp.get(j).get("chi_name")+"&#10;");
+				if(dtimeList==null&&stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				//if(stdsList!=null)out.println (tmp.get(j).get("ClassName")+"&#10;");
+				if(emplList==null)out.println (tmp.get(j).get("cname"));
+				if(nabbrList==null)out.println (tmp.get(j).get("place")+"&#10;");
+			}
+		}
+		out.println ("</Data></Cell>");
+		out.println ("   </Row>");
+		
+		out.println ("   <Row>");
+		out.println ("    <Cell ss:StyleID='s58'/>");
+		out.println ("   </Row>");
+		out.println ("   <Row>");
+		out.println ("    <Cell ss:StyleID='s58'/>");
+		out.println ("   </Row>");
+		out.println ("  </Table>");
+		out.println ("  <WorksheetOptions xmlns='urn:schemas-microsoft-com:office:excel'>");
+		out.println ("   <PageSetup>");
+		out.println ("    <Header x:Margin='0.3'");
+		out.println ("     x:Data='&amp;L&amp;&quot;微軟正黑體,標準&quot;&amp;24中華科技大學&amp;C&amp;&quot;微軟正黑體,粗體&quot;&amp;24 "+name+"&amp;R&amp;&quot;微軟正黑體,標準&quot;&amp;18 "+Syear+"學年度第"+Sterm+"學期'/>");
+		out.println ("    <Footer x:Margin='0.3'");
+		out.println ("     x:Data='&amp;L&amp;&quot;微軟正黑體,標準&quot;列印時間 &amp;D &amp;T&#10;&amp;10所有資料依相關單位期末留存為準'/>");
+		out.println ("    <PageMargins x:Bottom='1.0729166666666667' x:Left='0.25' x:Right='0.25'");
+		out.println ("     x:Top='0.75'/>");
+		out.println ("   </PageSetup>");
+		out.println ("   <Print>");
+		out.println ("    <ValidPrinterInfo/>");
+		out.println ("    <PaperSizeIndex>9</PaperSizeIndex>");
+		out.println ("    <HorizontalResolution>-1</HorizontalResolution>");
+		out.println ("    <VerticalResolution>-1</VerticalResolution>");
+		out.println ("   </Print>");
+		out.println ("   <Selected/>");
+		out.println ("   <ProtectObjects>False</ProtectObjects>");
+		out.println ("   <ProtectScenarios>False</ProtectScenarios>");
+		out.println ("  </WorksheetOptions>");
+		out.println (" </Worksheet>");
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	
+		
+		
 	}
 	
 

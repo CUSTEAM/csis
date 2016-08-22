@@ -455,16 +455,17 @@ public class CsCoansw extends BaseAction{
 				+ "s.coansw IS NOT NULL AND d.Oid=s.Dtime_oid AND s.student_no=st.student_no AND "
 				+ "c.ClassNo=d.depart_class AND cs.cscode=d.cscode AND d.Oid IN(");
 		for(int i=0; i<list.size(); i++){
+			System.out.println(list.get(i));
 			sb.append(list.get(i).get("Oid")+",");
 		}		
 		sb.delete(sb.length()-1, sb.length());
 		sb.append(")ORDER BY d.Oid, st.student_no");
-		
+		System.out.println(sb);
 		list=df.sqlGet(sb.toString());
 		
 		List<Map>ques=df.sqlGet("SELECT question, IFNULL(debug, '')as debug FROM Question WHERE topic='1'");
 		
-		out.println (" <Worksheet ss:Name='SHEET3'>");
+		out.println (" <Worksheet ss:Name='全校細節'>");
 		out.println ("  <Names>");
 		out.println ("   <NamedRange ss:Name='Print_Titles' ss:RefersTo='=SHEET2!R1'/>");
 		out.println ("  </Names>");
