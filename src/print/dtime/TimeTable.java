@@ -1594,7 +1594,7 @@ public class TimeTable extends BaseAction{
 		
 		
 		
-		//1-1
+		//15-15
 		out.println ("   <Row ss:AutoFitHeight='0' ss:Height='51.75'>");
 		out.println ("    <Cell ss:StyleID='s105'><Data ss:Type='String'>15</Data></Cell>");			
 		out.println ("<Cell ss:StyleID='s28'><Data ss:Type='String'>");
@@ -1654,7 +1654,7 @@ public class TimeTable extends BaseAction{
 			}
 		}
 		out.println ("</Data></Cell>");
-		out.println ("    <Cell ss:StyleID='s16'><Data ss:Type='String'>1</Data></Cell>");			
+		out.println ("    <Cell ss:StyleID='s16'><Data ss:Type='String'>15</Data></Cell>");			
 		out.println ("<Cell ss:StyleID='s28'><Data ss:Type='String'>");
 		for(int j=0; j<tmp.size(); j++){
 			if(tmp.get(j).get("week").toString().equals("6")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=15 && 15<=Integer.parseInt(tmp.get(j).get("end").toString())){
@@ -1824,7 +1824,7 @@ public class TimeTable extends BaseAction{
 			}
 		}
 		out.println ("</Data></Cell>");
-		out.println ("    <Cell ss:StyleID='s17'><Data ss:Type='String'>9</Data></Cell>");
+		out.println ("    <Cell ss:StyleID='s17'><Data ss:Type='String'>23</Data></Cell>");
 		out.println ("<Cell ss:StyleID='s32'><Data ss:Type='String'>");
 		for(int j=0; j<tmp.size(); j++){
 			if(tmp.get(j).get("week").toString().equals("6")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=23 && 23<=Integer.parseInt(tmp.get(j).get("end").toString())){
@@ -1907,7 +1907,7 @@ public class TimeTable extends BaseAction{
 			}
 		}
 		out.println ("</Data></Cell>");
-		out.println ("    <Cell ss:StyleID='s17'><Data ss:Type='String'>10</Data></Cell>");
+		out.println ("    <Cell ss:StyleID='s17'><Data ss:Type='String'>24</Data></Cell>");
 		out.println ("<Cell ss:StyleID='s32'><Data ss:Type='String'>");
 		for(int j=0; j<tmp.size(); j++){
 			if(tmp.get(j).get("week").toString().equals("6")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=24 && 24<=Integer.parseInt(tmp.get(j).get("end").toString())){
@@ -1990,7 +1990,7 @@ public class TimeTable extends BaseAction{
 			}
 		}
 		out.println ("</Data></Cell>");
-		out.println ("    <Cell ss:StyleID='s17'><Data ss:Type='String'>11</Data></Cell>");
+		out.println ("    <Cell ss:StyleID='s17'><Data ss:Type='String'>25</Data></Cell>");
 		out.println ("<Cell ss:StyleID='s32'><Data ss:Type='String'>");
 		for(int j=0; j<tmp.size(); j++){
 			if(tmp.get(j).get("week").toString().equals("6")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=25 && 25<=Integer.parseInt(tmp.get(j).get("end").toString())){
@@ -2073,7 +2073,7 @@ public class TimeTable extends BaseAction{
 			}
 		}
 		out.println ("</Data></Cell>");
-		out.println ("    <Cell ss:StyleID='s18'><Data ss:Type='String'>12</Data></Cell>");
+		out.println ("    <Cell ss:StyleID='s18'><Data ss:Type='String'>26</Data></Cell>");
 		out.println ("<Cell ss:StyleID='s45'><Data ss:Type='String'>");
 		for(int j=0; j<tmp.size(); j++){
 			if(tmp.get(j).get("week").toString().equals("6")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=26 && 26<=Integer.parseInt(tmp.get(j).get("end").toString())){
@@ -2156,7 +2156,7 @@ public class TimeTable extends BaseAction{
 			}
 		}
 		out.println ("</Data></Cell>");
-		out.println ("    <Cell ss:StyleID='s18'><Data ss:Type='String'>13</Data></Cell>");
+		out.println ("    <Cell ss:StyleID='s18'><Data ss:Type='String'>27</Data></Cell>");
 		out.println ("<Cell ss:StyleID='s45'><Data ss:Type='String'>");
 		for(int j=0; j<tmp.size(); j++){
 			if(tmp.get(j).get("week").toString().equals("6")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=27 && 27<=Integer.parseInt(tmp.get(j).get("end").toString())){
@@ -2239,7 +2239,7 @@ public class TimeTable extends BaseAction{
 			}
 		}
 		out.println ("</Data></Cell>");
-		out.println ("    <Cell ss:StyleID='s20'><Data ss:Type='String'>14</Data></Cell>");
+		out.println ("    <Cell ss:StyleID='s20'><Data ss:Type='String'>28</Data></Cell>");
 		out.println ("<Cell ss:StyleID='s48'><Data ss:Type='String'>");
 		for(int j=0; j<tmp.size(); j++){
 			if(tmp.get(j).get("week").toString().equals("6")&& Integer.parseInt(tmp.get(j).get("begin").toString())<=28 && 28<=Integer.parseInt(tmp.get(j).get("end").toString())){

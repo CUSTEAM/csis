@@ -61,7 +61,7 @@ ${close}
 		<td>
 		<select name="begin" onChange="checkTime()">
 			<option value=""></option>
-			<c:forEach begin="1" end="14" var="b">
+			<c:forEach begin="1" end="16" var="b">
 			<option value="${b}">第${b}節</option>
 			</c:forEach>
 		</select>				
@@ -69,7 +69,7 @@ ${close}
 		<td>
 		<select name="end" onChange="checkTime()">
 			<option value=""></option>
-			<c:forEach begin="1" end="14" var="e">
+			<c:forEach begin="1" end="16" var="e">
 			<option value="${e}">第${e}節</option>
 			</c:forEach>
 		</select>
