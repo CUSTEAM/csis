@@ -9,6 +9,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
+
 import action.BaseAction;
 
 public class List4DtimeG extends BaseAction{
@@ -269,7 +271,7 @@ public class List4DtimeG extends BaseAction{
 			
 			out.println ("   <Row ss:AutoFitHeight='0' ss:Height='19.5'>");
 			//科系屬性碼
-			depType="";
+			depType=getDept(dtimeList.get(i).get("ClassNo").toString());
 			if ((dtimeList.get(i)).get("chi_name").toString().indexOf("體育") >= 0 || dtimeList.get(i).get("chi_name").toString().indexOf("軍訓") >= 0) {
 				depType = "9901";
 			}
@@ -461,6 +463,75 @@ public class List4DtimeG extends BaseAction{
 		
 	}
 	
+	private String getDept(String departClass){		
+
+		if (StringUtils.isBlank(departClass))return "";
+		String deptCode;
+		if(departClass.length()==6){
+			deptCode = StringUtils.substring(departClass, 3, 4);
+			switch (deptCode.charAt(0)) {
+			case '0':
+				return "999901";
+			case '1':
+				return "520201";
+			case '2':
+				return "520101";
+			case '3':
+				return "520103";
+			case '4':
+				return "520601";
+			case '5':
+				return "580101";			
+			case '6':
+				return "520301";
+			case '7':
+				return "340301";
+			case '8':
+				return "";
+			case '9':
+				return "340501";
+			case 'A':
+				return "520208";
+			case 'B':
+				return "520112";
+			case 'C':
+				return "840202";
+			case 'D':
+				return "349902";
+			case 'E':
+				return "520114";
+			case 'F':
+				return "620601";
+			case 'G':
+				return "";
+			case 'H':
+				return "420302";
+			case 'I':
+				return "810103";
+			case 'J':
+				return "810202";
+			case 'K':
+				return "340307";
+			case 'U':
+				return "810224";
+			case 'V':
+				return "580101";
+			case 'W':
+				return "239904";
+			case 'X':
+				return "340120";
+			default:
+				return "";
+			}
+		}else{
+			deptCode = StringUtils.substring(departClass, 3, 5);
+			if(deptCode.equals("KA")){
+				return"340824";
+			}			
+			return"";
+		}
+		
+	}
 	
 
 }

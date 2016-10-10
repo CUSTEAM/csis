@@ -11,15 +11,7 @@
 <script src="/eis/inc/js/plugin/bootstrap-tooltip.js"></script>
 <link href="/eis/inc/css/jquery-ui.css" rel="stylesheet"/>
 <script src="/eis/inc/js/plugin/stupidtable.min.js"></script>
-<style>
-    body .modal {
-    /* new custom width */
-    width: 960px;
-    /* must be half of the width, minus scrollbar on the left (30px) */
-    margin-left: -480px;
 
-}
-</style>
 <script>  
 $(document).ready(function() {
 	$("input[id='stdName']").typeahead({
@@ -113,40 +105,46 @@ function getSeldHist(stdNo){
 <button class="btn" data-dismiss="modal" aria-hidden="true">關閉</button>
 </div>
 </div>
-<div class="alert alert alert-warning" role="alert">
+<div class="bs-callout bs-callout-info" id="callout-helper-pull-navbar">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>第2學期選課管理</strong>    
 </div>
 <form action="AddSeldNext" method="post" class="form-inline">
 <table class="table">
 	<tr>
-		<td nowrap>指定班級</td>
-		<td width="100%">
+		
+		<td>
 		<input type="hidden" name="term" id="term" value="2"/>
 		<%@ include file="/inc/jsp-kit/classSelector.jsp"%>
-		<button class="btn" name="method:searchClass" type="submit">查詢課程</button>
+		<button class="btn btn-danger" name="method:searchClass" type="submit">查詢班級開設課程</button>
 		</td>
 	</tr>
 	<tr>
-		<td nowrap>指定課程</td>
-		<td width="100%">
-		<div class="input-append control-group" style="float:left;">
-			<input class="span6" onClick="$('#dkey').val(''), $('#dvalue').val('');" autocomplete="off" type="text" id="dkey" value="${dkey}" name="dkey"
+		<td>
+		<div class="input-group">
+		  	<span class="input-group-addon" id="sizing-addon2">指定課程</span>
+			<input class="form-control" onClick="$('#dkey').val(''), $('#dvalue').val('');" autocomplete="off" type="text" id="dkey" value="${dkey}" name="dkey"
 			 data-provide="typeahead" onClick="addStd()" placeholder="課程編號、代碼、教師姓名或班級代碼與班級名稱片段" />
 			<input type="hidden" id="dvalue" value="${dvalue}" name="dvalue"/>
-		    <button class="btn" id="searchDtime" name="method:searchDtime" type="submit">查詢課程選課</button>		    
+		    <span class="input-group-btn">
+		    <button class="btn btn-default" id="searchDtime" name="method:searchDtime" type="submit">查詢課程選課</button>		    
+			</span>
 		</div>
 		</td>
 	</tr>
 	<tr>
-		<td nowrap>指定學生</td>
+		
 		<td width="100%" colspan="2">
-		<div class="input-append control-group" style="float:left;">
-			<input class="span4" onClick="$('#stdName').val(''), $('#stdNo').val('');" autocomplete="off" type="text" id="stdName" value="${stdName}" name="stdName"
+		
+		<div class="input-group">
+		  	<span class="input-group-addon" id="sizing-addon2">指定學生</span>
+			<input class="form-control" onClick="$('#stdName').val(''), $('#stdNo').val('');" autocomplete="off" type="text" id="stdName" value="${stdName}" name="stdName"
 			 data-provide="typeahead" onClick="addStd()" placeholder="學號或姓名片段" />
 			<input type="hidden" id="stdNo" value="${stdNo}" name="stdNo"/>
 			<input type="hidden" id="delNo" name="delNo"/>
-		    <button class="btn" id="searchStd" name="method:searchStd" type="submit">查詢學生選課</button>		    		   
+		    <span class="input-group-btn">
+		    <button class="btn btn-default" id="searchStd" name="method:searchStd" type="submit">查詢學生選課</button>		    		   
+			</span>
 		</div>&nbsp;
 		<button class="btn btn-danger" name="method:createSeldByStd" type="submit">建立學生選課</button>
 		<button id="compel" style="display:none;" name="method:compel" type="submit">compel</button>
@@ -173,31 +171,32 @@ function getSeldHist(stdNo){
 	</thead>
 	<c:forEach items="${css}" var="c">
 	<tr>
-		<td class="text-info" nowrap>${c.Oid}</td>
-		<td class="text-info" nowrap>${c.ClassName}</td>
-		<td class="text-info" width="100%">${c.cscode}${c.chi_name}</td>
-		<td class="text-info" nowrap>${c.cname}</td>
-		<td class="text-info" nowrap>${c.opt}</td>
-		<td class="text-info" nowrap>${c.credit}</td>
-		<td class="text-info" nowrap>${c.thour}</td>
-		<td class="text-info" nowrap>${c.cnt}/${c.Select_Limit}</td>
-		<td>  
-    		<div class="btn-group">
-		    <a class="btn dropdown-toggle" data-toggle="dropdown"><span class="icon-print"></span></a>
-		    <ul class="dropdown-menu">
-		    	<li><a class="btn btn-link" href="SylDoc?Oid=${c.Oid}">課程大綱</a></li>
-		    	<li><a class="btn btn-link" href="IntorDoc?Oid=${c.Oid}">中英文簡介</a></li>
-		    	<li><a class="btn btn-link" href="DtimeSelds?Oid=${c.Oid}">選課學生</a></li>
-		    </ul>
-		    </div>
-	   	</td>
-		<td class="text-info" nowrap>
+		<td nowrap>${c.Oid}</td>
+		<td nowrap>${c.ClassName}</td>
+		<td nowrap>${c.cscode}${c.chi_name}</td>
+		<td nowrap>${c.cname}</td>
+		<td nowrap>${c.opt}</td>
+		<td nowrap>${c.credit}</td>
+		<td nowrap>${c.thour}</td>
+		<td nowrap>${c.cnt}/${c.Select_Limit}</td>
+		<td nowrap> 
 		
-		<div class="btn-group" onClick="$('#Oid').val('${c.Oid}')">
-		<button class="btn" name="method:clearSeld" onClick="javascript: return(confirm('確定刪除?')); void('')" type="submit">清除本班選課</button>
-		<button class="btn" name="method:clearAllSeld" onClick="javascript: return(confirm('確定刪除?')); void('')" type="submit">清除所有選課</button>
-		<button class="btn" name="method:generateThisTerm" type="submit">建立本班選課</button>
+		<div class="dropdown">
+		  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">列印 <span class="caret"></span></button>
+		  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+		    <li><a class="btn btn-link" href="SylDoc?Oid=${c.Oid}">課程大綱</a></li>
+		    <li><a class="btn btn-link" href="IntorDoc?Oid=${c.Oid}">中英文簡介</a></li>
+		    <li><a class="btn btn-link" href="DtimeSelds?Oid=${c.Oid}">選課學生</a></li>
+		  </ul>
 		</div>
+		    
+	   	</td>
+		<td nowrap onClick="$('#Oid').val('${c.Oid}')">		
+		
+		<button class="btn btn-default" name="method:clearSeld" onClick="javascript: return(confirm('確定刪除?')); void('')" type="submit">清除本班選課</button>
+		<button class="btn btn-default" name="method:clearAllSeld" onClick="javascript: return(confirm('確定刪除?')); void('')" type="submit">清除所有選課</button>
+		<button class="btn btn-default" name="method:generateThisTerm" type="submit">建立本班選課</button>
+		
 		</td>
 	</tr>
 	</c:forEach>

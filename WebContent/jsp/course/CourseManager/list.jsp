@@ -46,9 +46,9 @@
 	   		</td>
 	   		
 	   		<td width="100%" nowrap>    			
-	    		<button class="btn" onClick="$('#Dtime_oid').val('${c.Oid}')" name="method:edit">修改</button>
+	    		<button class="btn btn-default" onClick="$('#Dtime_oid').val('${c.Oid}')" name="method:edit">修改</button>
 	    		<div class="btn-group">
-			    <a class="btn dropdown-toggle" data-toggle="dropdown">列印</a>
+			    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown">列印</a>
 			    <ul class="dropdown-menu">
 			    	<li><a class="btn btn-link" href="SylDoc?Dtime_oid=${c.Oid}">課程大綱</a></li>
 			    	<li><a class="btn btn-link" href="IntorDoc?Dtime_oid=${c.Oid}">中英文簡介</a></li>

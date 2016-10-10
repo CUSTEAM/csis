@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>課程管理</title>
 <script src="/eis/inc/js/plugin/bootstrap-typeahead.js"></script>
 <script src="/eis/inc/js/plugin/jquery-ui.js"></script>
 <script src="/eis/inc/js/plugin/stupidtable.min.js"></script>
@@ -15,32 +15,23 @@
 
 </head>
 <body>
-<div class="alert 
+<div class="bs-callout 
 <c:choose>
-  <c:when test="${empty close}">alert-info</c:when>
-  <c:when test="${!empty close}">alert-success</c:when>
+  <c:when test="${empty close}">bs-callout-info</c:when>
+  <c:when test="${!empty close}">bs-callout-success</c:when>
   <c:otherwise>alert-info</c:otherwise>
 </c:choose>">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>課程管理</strong>
     <c:if test="${!empty close}">次學期課程規劃期間自 ${cs_plan_begin}至 ${cs_plan_end}</c:if>
 </div>
+
 <form action="CourseManager" method="post" class="form-inline">
+
 <%@ include file="/jsp/course/CourseManager/search.jsp"%>	
-<table class="table">	
-	<tr>
-		<td>
-			<button class="btn demo" name="method:add">新增課程</button>
-		    <%@ include file="/jsp/course/CourseManager/print.jsp"%>
-		    
-		    <div class="btn-group">
-		    	 
-		    <a class="btn" href="javascript:window.location.replace(window.location)">重新設定條件</a>
-		    <button class="btn btn-danger" name="method:search">查詢列表</button>
-		    </div>   
-		</td>
-	</tr>
-</table>    
+
+
+
     
 <c:if test="${!empty css}">     
 <%@ include file="/jsp/course/CourseManager/list.jsp"%>

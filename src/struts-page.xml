@@ -50,6 +50,10 @@
 			<result name="editMulTech">/jsp/course/CourseManager/editMulTech.jsp</result>			
 		</action>
 		
+		<action name="YUNTECHDtimeManager" class="action.yuntech.YUNTECHDtimeManagerAction">
+			<result>/jsp/course/yuntech/YUNTECHDtimeManager.jsp</result>
+		</action>
+		
 		<action name="ReSetDtime" class="action.course.ReSetDtime">
 			<result>/jsp/course/ReSetDtime.jsp</result>
 		</action>

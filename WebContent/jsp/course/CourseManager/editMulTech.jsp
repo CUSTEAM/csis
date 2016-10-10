@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>分組名單管理</title>
 <script src="/eis/inc/js/plugin/stupidtable.min.js"></script>
 <script>
     $(document).ready(function(){
@@ -16,17 +16,21 @@
 </head>
 <body>
 <form action="CourseManager" method="post" class="form-inline">
-<div class="alert alert alert-warning" role="alert">
+<div class="bs-callout bs-callout-info" id="callout-helper-pull-navbar">
    	 正在修改 <strong>${dtime.Oid}, ${dtime.ClassName}, ${dtime.chi_name}</strong>     
     <div class="btn-group">	    
-		<button class="btn btn-small" name="method:edit">返回課程</button>
-		<button class="btn btn-danger btn-small" name="method:saveMultSeld">儲存學生分組</button>
+    	<button class="btn btn-danger btn-small" name="method:saveMultSeld">儲存學生分組</button>
+		<button class="btn btn-default btn-small" name="method:edit">返回課程</button>
+		
 	</div>
     
 </div>
 <input type="hidden" name="Dtime_oid" value="${dtime.Oid}" />
 
-<div style="float:left;">
+<div class="row">
+<div class="col-md-6">
+<div class="panel panel-primary">
+<div class="panel-heading">第1至${fn:length(ss)/2}名學生</div>
 <table class="table" id="row">
 	<thead>
         <tr>
@@ -44,19 +48,24 @@
 		<td nowrap>${s.student_name}</td>
 		<td width="100%">
 		<div style="display:none;">${s.Dtime_teacher}</div>
-		<select name="techids">
-			<option></option>
+		<select name="techids" class="selectpicker" data-width="auto">
+			<option value="">未選擇分組</option>
 			<c:forEach items="${ts}" var="t">
 			<option <c:if test="${t.Oid eq s.Dtime_teacher}">selected</c:if> value="${t.Oid}">${t.cname}</option>
 			</c:forEach>
 		</select>
+		<c:if test="${!empty s.Dtime_teacher}"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></c:if>
 		</td>
 	</tr>
 	</c:forEach>	
 	</tbody>
 </table>
 </div>
-<div>
+
+</div>
+<div class="col-md-6">
+<div class="panel panel-primary">
+<div class="panel-heading">第${fn:length(ss)/2}至${fn:length(ss)}名學生</div>
 <table class="table" id="row">
 	<thead>
         <tr>
@@ -74,8 +83,8 @@
 		<td nowrap>${s.student_name}</td>
 		<td width="100%">
 		<div style="display:none;">${s.Dtime_teacher}</div>
-		<select name="techids">
-			<option></option>
+		<select name="techids" class="selectpicker" data-width="auto">
+			<option value="">未選擇分組</option>
 			<c:forEach items="${ts}" var="t">
 			<option <c:if test="${t.Oid eq s.Dtime_teacher}">selected</c:if> value="${t.Oid}">${t.cname}</option>
 			</c:forEach>
@@ -87,11 +96,20 @@
 </table>
 </div>
 
+</div>
+
+
+</div>
+
+
+
+
 
 
 <div class="btn-group">    
-	<button class="btn" name="method:edit">返回課程</button>
 	<button class="btn btn-danger" name="method:saveMultSeld">儲存學生分組</button>
+	<button class="btn btn-default" name="method:edit">返回課程</button>
+	
 </div>
 
 

@@ -633,7 +633,6 @@ public class CourseManagerBase extends BaseAction{
 		for(int i=0; i<cidno.length; i++){
 			if(!cidno[i].equals("")&&!sidno[i].equals("")&&!didno[i].equals("")&&!grade[i].equals("")&&!classes[i].equals("")){
 				try{
-					System.out.println("INSERT INTO Dtime_cross(Cidno, Sidno, Didno, Grade, ClassNo, Dtime_oid)VALUES('"+cidno[i]+"', '"+sidno[i]+"', '"+didno[i]+"', '"+grade[i]+"', '"+classes[i]+"', "+Dtime_oid+")");
 					df.exSql("INSERT INTO Dtime_cross(Cidno, Sidno, Didno, Grade, ClassNo, Dtime_oid)VALUES('"+cidno[i]+"', '"+sidno[i]+"', '"+didno[i]+"', '"+grade[i]+"', '"+classes[i]+"', "+Dtime_oid+")");
 				}catch(Exception e){
 					msg.setError("跨選規則重複");

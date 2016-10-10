@@ -1,11 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <div id="timeTable" style="padding:0px;">
-${close}
-<table>	
+<table class="table">	
 	<c:forEach items="${dc}" var="d">
 	<tr>
 		<td>
-		<select name="week" onChange="checkTime()">
+		<select name="week" onChange="checkTime()" class="selectpicker" data-width="auto">
 			<option value="">刪除</option>
 			<option <c:if test="${d.week eq'1'}">selected</c:if> value="1">週一</option>
 			<option <c:if test="${d.week eq'2'}">selected</c:if> value="2">週二</option>
@@ -15,24 +14,18 @@ ${close}
 			<option <c:if test="${d.week eq'6'}">selected</c:if> value="6">週六</option>
 			<option <c:if test="${d.week eq'7'}">selected</c:if> value="7">週日</option>
 		</select>
-		</td>
-		<td>
-		<select name="begin" onChange="checkTime()">
+		<select name="begin" onChange="checkTime()" class="selectpicker" data-width="auto">
 			<c:forEach begin="1" end="28" var="b">
 			<option <c:if test="${d.begin eq b}">selected</c:if> value="${b}">第${b}節</option>
 			</c:forEach>
-		</select>				
-		</td>
-		<td>
-		<select name="end" onChange="checkTime()">
+		</select>	
+		<select name="end" onChange="checkTime()" class="selectpicker" data-width="auto">
 			<c:forEach begin="1" end="28" var="e">
 			<option <c:if test="${d.end eq e}">selected</c:if> value="${e}">第${e}節</option>
 			</c:forEach>
 		</select>
-		</td>
-		<td width="100%">
 		
-		<input type="text" name="place" class="place" autocomplete="off" 
+		<input type="text" name="place" class="place form-control" autocomplete="off" 
 		value="<c:if test="${d.place!=null&& d.place ne''}">${d.place}, ${d.name2}</c:if>" 
 		onClick="this.value='';" data-provide="typeahead"/>				
 		
@@ -42,13 +35,13 @@ ${close}
 </table>
 </div>
 
-<div id="timeTmp" style="display:none; padding:0px;">
-<c:forEach begin="1" end="5">
-<table>
+<div id="timeTmp" style="display:none;">
+<table class="table">
+	<c:forEach begin="1" end="5">
 	<tr>
 		<td>		
-		<select name="week" onChange="checkTime()">
-			<option value=""></option>
+		<select name="week" onChange="checkTime()" class="selectpicker" data-width="auto">
+			<option value="">星期</option>
 			<option value="1">週一</option>
 			<option value="2">週二</option>
 			<option value="3">週三</option>
@@ -57,34 +50,24 @@ ${close}
 			<option value="6">週六</option>
 			<option value="7">週日</option>
 		</select>
-		</td>
-		<td>
-		<select name="begin" onChange="checkTime()">
-			<option value=""></option>
+		<select name="begin" onChange="checkTime()" class="selectpicker" data-width="auto">
+			<option value="">節次</option>
 			<c:forEach begin="1" end="16" var="b">
 			<option value="${b}">第${b}節</option>
 			</c:forEach>
-		</select>				
-		</td>
-		<td>
-		<select name="end" onChange="checkTime()">
-			<option value=""></option>
+		</select>	
+		<select name="end" onChange="checkTime()" class="selectpicker" data-width="auto">
+			<option value="">節次</option>
 			<c:forEach begin="1" end="16" var="e">
 			<option value="${e}">第${e}節</option>
 			</c:forEach>
-		</select>
-		</td>
-		<td width="100%">
-		
-		<input type="text" name="place" class="place" autocomplete="off" onClick="this.value='';" data-provide="typeahead"/>				
-		
+		</select>		
+		<input type="text" name="place" class="place form-control" autocomplete="off" onClick="this.value='';" data-provide="typeahead"/>				
 		</td>				
 	</tr>
+	</c:forEach>
 </table>
-</c:forEach>
-</div>	
-
-
+</div>
 <script>
 function checkTime(){
 	week=$('select[name="week"]');
