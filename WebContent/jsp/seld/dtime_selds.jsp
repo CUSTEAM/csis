@@ -27,7 +27,9 @@
 		<td class="text-info">${s.credit}</td>
 		<td class="text-info">${s.thour}</td>
 		<td class="text-info" nowrap>
-		<c:if test="${!empty s.student_no}"><a href="#seldInfo" data-toggle="modal" onClick="getSeldHist('${s.student_no}')">
+		<c:if test="${!empty s.student_no}">
+		
+		<a data-toggle="modal" data-target="#myModal" onClick="getSeldHist('${s.student_no}')">
 		${s.student_no}, ${s.student_name} <i class="icon-search"></i></a>
 		</c:if>
 		</td>

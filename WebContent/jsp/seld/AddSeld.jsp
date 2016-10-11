@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>第2學期選課管理</title>
+<title>第1學期選課管理</title>
 <script src="/eis/inc/js/plugin/bootstrap-typeahead.js"></script>
 <script src="/eis/inc/js/plugin/json2.js"></script>
 <script src="/eis/inc/js/plugin/jquery-ui.js"></script>
@@ -95,7 +95,7 @@ function getSeldHist(stdNo){
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -109,11 +109,13 @@ function getSeldHist(stdNo){
     </div>
   </div>
 </div>
-<div class="bs-callout bs-callout-info" id="callout-helper-pull-navbar">
+<div class="bs-callout bs-callout-info">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>第1學期選課管理</strong>    
 </div>
 <form action="AddSeld" method="post" class="form-inline">
+<div class="panel panel-primary">
+<div class="panel-heading">查詢範圍</div>
 <table class="table">
 	<tr>
 		
@@ -164,55 +166,76 @@ function getSeldHist(stdNo){
 			<th nowrap>課程編號 </th>
 			<th nowrap data-sort="string" style="cursor:n-resize;">開課班級 <i class="icon-chevron-down"></i></th>
 			<th nowrap data-sort="string" style="cursor:n-resize;">課程名稱 <i class="icon-chevron-down"></i></th>
+			<th nowrap></th>
+			<th nowrap></th>
 			<th nowrap data-sort="string" style="cursor:n-resize;">授課教師 <i class="icon-chevron-down"></i></th>
 			<th nowrap data-sort="string" style="cursor:n-resize;">選別 <i class="icon-chevron-down"></i></th>
 			<th nowrap data-sort="string" style="cursor:n-resize;">學分 <i class="icon-chevron-down"></i></th>
 			<th nowrap data-sort="string" style="cursor:n-resize;">時數 <i class="icon-chevron-down"></i></th>
 			<th nowrap data-sort="string" style="cursor:n-resize;">已選/上限 <i class="icon-chevron-down"></i></th>
-			<th nowrap></th>
-			<th nowrap></th>
+			
 		</tr>
 	</thead>
 	<c:forEach items="${css}" var="c">
 	<tr>
 		<td nowrap>${c.Oid}</td>
 		<td nowrap>${c.ClassName}</td>
-		<td nowrap>${c.cscode}${c.chi_name}</td>
+		<td width="100%">${c.cscode}${c.chi_name}</td>
+		<td nowrap> 
+		
+		
+		<div class="btn-group">
+		  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		    列印 <span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu">
+		    <li><a href="SylDoc?Dtime_oid=${c.Oid}">課程大綱</a></li>
+		    <li><a href="IntorDoc?Dtime_oid=${c.Oid}">中英文簡介</a></li>
+		    <li role="separator" class="divider"></li>
+		    <li><a href="DtimeSelds?Dtime_oid=${c.Oid}">選課學生</a></li>
+		  </ul>
+		</div>		    
+	   	</td>
+		<td nowrap onClick="$('#Oid').val('${c.Oid}')">			
+		<div class="btn-group">
+		  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		    批次 <span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu">
+		    <li><button class="btn btn-link" name="method:generateThisTerm" type="submit">建立本班選課</button></li>
+		    <li><button class="btn btn-link" name="method:generateUpgrade" type="submit">建立升級選課</button></li>
+		    <li role="separator" class="divider"></li>
+		    <li><button class="btn btn-link" name="method:clearSeld" onClick="javascript: return(confirm('確定刪除?')); void('')" type="submit">清除本班選課</button></li>
+		  	<button class="btn btn-link" name="method:clearAllSeld" onClick="javascript: return(confirm('確定刪除?')); void('')" type="submit">清除所有選課</button>
+		  </ul>
+		</div>
+		
+		
+		
+		
+		
+		
+		</td>
 		<td nowrap>${c.cname}</td>
 		<td nowrap>${c.opt}</td>
 		<td nowrap>${c.credit}</td>
 		<td nowrap>${c.thour}</td>
 		<td nowrap>${c.cnt}/${c.Select_Limit}</td>
-		<td nowrap> 
 		
-		<div class="dropdown">
-		  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">列印 <span class="caret"></span></button>
-		  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-		    <li><a class="btn btn-link" href="SylDoc?Oid=${c.Oid}">課程大綱</a></li>
-		    <li><a class="btn btn-link" href="IntorDoc?Oid=${c.Oid}">中英文簡介</a></li>
-		    <li><a class="btn btn-link" href="DtimeSelds?Oid=${c.Oid}">選課學生</a></li>
-		  </ul>
-		</div>
-		    
-	   	</td>
-		<td nowrap onClick="$('#Oid').val('${c.Oid}')">		
-		<button class="btn btn-default" name="method:generateThisTerm" type="submit">建立本班選課</button>
-		<button class="btn btn-default" name="method:clearSeld" onClick="javascript: return(confirm('確定刪除?')); void('')" type="submit">清除本班選課</button>
-		<button class="btn btn-danger" name="method:clearAllSeld" onClick="javascript: return(confirm('確定刪除?')); void('')" type="submit">清除所有選課</button>
-		
-		
-		</td>
 	</tr>
 	</c:forEach>
 </table>
+</div>
 <script>
 $("#row").stupidtable();
 </script>
 </c:if>
 <c:if test="${!empty sumCredit}">
-<div class="alert alert alert-warning" role="alert">個人學分: ${sumCredit.credit}, 
-時數: ${sumCredit.thour} 
-<a type="button" data-toggle="modal" 
+
+<div class="panel-body">
+<span class="label label-primary">${sumCredit.credit}學分</span> 
+<span class="label label-primary">${sumCredit.thour}小時</span> 
+<a class="btn btn-default btn-xs" type="button" data-toggle="modal" 
 data-target="#myModal" 
 onClick="getSeldHist($('#stdNo').val())">
 		  查看加退選歷程</a>

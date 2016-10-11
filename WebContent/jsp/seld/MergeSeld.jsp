@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>本學期併班選課管理</title>
 <script src="/eis/inc/js/plugin/bootstrap-typeahead.js"></script>
 <script src="/eis/inc/js/plugin/jquery-ui.js"></script>
 <script src="/eis/inc/js/plugin/stupidtable.min.js"></script>
@@ -79,72 +79,102 @@
 </script>
 </head>
 <body>
-<div class="alert alert alert-warning" role="alert">
+<div class="bs-callout bs-callout-info">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>本學期併班選課管理</strong>    
 </div>
-<form action="MergeSeld" method="post">
+<form action="MergeSeld" class="form-inline" method="post">
+<div class="panel panel-primary">
+<div class="panel-heading">合併課程</div>
 <table class="table">
 		<tr>
-			<td class="control-group success">
-			<div class="input-prepend">
-			<span class="add-on">目標學期</span>
-	            <select name="term" id="term">
+			<td>
+			
+			<div class="input-group">
+		  	<span class="input-group-addon">目標學期</span>
+	            <select name="term" id="term" class="form-control">
 	            	<option <c:if test="${term eq'1'}">selected</c:if> value="1">第1學期</option>
 	            	<option <c:if test="${term eq'2'}">selected</c:if> value="2">第2學期</option>
 	            </select>
 	        </div>
-			<div class="input-prepend">
-			<span class="add-on">合併後課程</span>
-	            <input name="targetOid" id="targetOid" value="${targetOid}" class="span8" data-provide="typeahead" onClick="this.value=''" placeholder="課程編號、班級代碼、科目代碼、科目名稱、教師姓名..." autocomplete="off" type="text"/>
+	        
+			<div class="input-group">
+		  	<span class="input-group-addon">合併後課程</span>
+	            <input name="targetOid" id="targetOid" value="${targetOid}" class="span8 form-control" data-provide="typeahead" onClick="this.value=''" placeholder="課程編號、班級代碼、科目代碼、科目名稱、教師姓名..." autocomplete="off" type="text"/>
 	        </div>		
 			</td>
 		</tr>
 </table>
-<div class="row">
-    <div class="span4">
-    <table class="table">	
-		<tr>
-			<td class="control-group error">
-			<div class="alert alert-error">選定被合併班級的學生加選合併後課程</div>
-			<c:forEach begin="1" end="5">			
-			<div class="input-prepend">
-			<span class="add-on">被合併班級</span>
-	            <input name="ClassNos" class="span3" data-provide="typeahead" onClick="this.value=''" placeholder="班級代碼或班級名稱" autocomplete="off" type="text"/>
-	        </div>
-	        <br>
-	        </c:forEach>
-	        <button id="mergeClass" name="method:mergeClass" class="btn btn-danger" onClick="javascript: return(confirm('確定合併?')); void('')">合併班級</button>		
-			</td>
-		</tr>
-	</table>
+</div>
 
-</div>
-    <div class="span8">
-    <table class="table">
-		<tr>
-			<td class="control-group info">
-			<div class="alert alert-info">選定被合併課程的選課學生轉移至合併後課程</div>
-			<c:forEach begin="1" end="5">
-			
-			<div class="input-prepend">
-			<span class="add-on">被合併課程</span>
-	            <input name="dtimeOids" class="span8" data-provide="typeahead" onClick="this.value=''" placeholder="課程編號、班級代碼、科目代碼、科目名稱、教師姓名..." autocomplete="off" type="text"/>
-	        </div>
-	        <br>
-	        </c:forEach>
-	        <button name="method:mergeSeld" id="mergeSeld" class="btn btn-info" onClick="javascript: return(confirm('確定合併?')); void('')">合併課程</button>		
-			</td>
-		</tr>
-	</table>
+
+<div class="row">
+	<div class="col-md-6">
+	
+	<div class="panel panel-primary">
+	<div class="panel-heading">選擇班級</div>
+	<div class="panel-body">選定被合併班級的學生加選合併後課程</div>
+	<table class="table">
+	<c:forEach begin="1" end="5">
+	<tr>
+		<td>			
+		<div class="input-group">
+	  		<span class="input-group-addon">被合併班級</span>
+	    	<input name="ClassNos" class="span3 form-control" data-provide="typeahead" onClick="this.value=''" placeholder="班級代碼或班級名稱" autocomplete="off" type="text"/>
+	    </div>
+	    </td>
+	</tr>
     
+    </c:forEach>
+    </table>
+    <div class="panel-body">
+    	<button id="mergeClass" name="method:mergeClass" class="btn btn-danger" onClick="javascript: return(confirm('確定合併?')); void('')">班級合併</button>
+	</div>
     </div>
+    
+	
+	</div>
+	<div class="col-md-6">
+	
+	<div class="panel panel-primary">
+	<div class="panel-heading">選擇課程</div>
+	<div class="panel-body">選定被合併課程的選課學生轉移至合併後課程</div>
+	
+			<table class="table">					
+			<c:forEach begin="1" end="5">
+			<tr>
+				<td>
+			<div class="input-group">
+		  	<span class="input-group-addon">被合併課程</span>
+	            <input name="dtimeOids" class="span8 form-control" data-provide="typeahead" onClick="this.value=''" placeholder="課程編號、班級代碼、科目代碼、科目名稱、教師姓名..." autocomplete="off" type="text"/>
+	        </div>
+	        </td>
+	    </tr>
+		</c:forEach>
+	</table>
+	<div class="panel-body"><button name="method:mergeSeld" id="mergeSeld" class="btn btn-danger" onClick="javascript: return(confirm('確定合併?')); void('')">課程合併</button></div>
+	        		
+			
+	</div>
+	
+	
+	</div>
 </div>
+
+
+
+			
+
+
+
+
 
 
 
 </form>
 <c:if test="${!empty css}">
+<div class="panel panel-primary">
+<div class="panel-heading">合併結果</div>
 <table class="table">
 	<tr>
 		<td>課程編號</td>
@@ -161,6 +191,7 @@
 	</tr>
 	</c:forEach>
 </table>
+</div>
 </c:if>
 </body>
 </html>

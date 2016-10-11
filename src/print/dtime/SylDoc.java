@@ -16,6 +16,7 @@ public class SylDoc extends SylParser{
 	public String execute() throws IOException{		
 		String Dtime_oid=request.getParameter("Dtime_oid");
 		String Savedtime_oid=request.getParameter("Savedtime_oid");//歷史學年
+		System.out.println("SELECT Oid FROM Dtime WHERE Oid="+Dtime_oid);
 		if(Dtime_oid!=null){//現在學年
 			print(response, df.sqlGet("SELECT Oid FROM Dtime WHERE Oid="+Dtime_oid),getContext().getAttribute("school_year").toString(), getContext().getAttribute("school_term").toString(), false);
 		}else{

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 
-<title>Insert title here</title>
+<title>1/3缺課名單列印</title>
 <script src="/eis/inc/js/plugin/bootstrap-typeahead.js"></script>
 <script src="/eis/inc/js/plugin/json2.js"></script>
 <script src="/eis/inc/js/plugin/jquery-ui.js"></script>
@@ -48,7 +48,7 @@ $(document).ready(function() {
 <body>
     
     
-<div class="alert alert alert-warning" role="alert">
+<div class="bs-callout bs-callout-info">
 <button type="button" class="close" data-dismiss="alert">&times;</button>
 <strong>1/3缺課名單列印</strong> 名單於學務單位結算操行成績時建立 
 
