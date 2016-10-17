@@ -398,9 +398,9 @@ public class List4DtimeG extends BaseAction{
 				practical = true;
 			}
 			
-			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>http://ap.cust.edu.tw/CIS/Print/teacher/IntorDoc.do?Oid="+ dtimeList.get(i).get("Oid") + "</Data></Cell>");
-			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>http://ap.cust.edu.tw/CIS/Print/teacher/SylDoc.do?Oid="+   dtimeList.get(i).get("Oid") + "</Data></Cell>");
-			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>http://ap.cust.edu.tw/CIS/Print/teacher/IntorDoc.do?Oid="+ dtimeList.get(i).get("Oid") + "</Data></Cell>");
+			out.println ("    <Cell ss:StyleID='s63' ss:HRef='http://ap.cust.edu.tw/CIS/Print/teacher/IntorDoc.do?Oid="+ dtimeList.get(i).get("Oid") + "'><Data ss:Type='String'>http://ap.cust.edu.tw/CIS/Print/teacher/IntorDoc.do?Oid="+ dtimeList.get(i).get("Oid") + "</Data></Cell>");
+			out.println ("    <Cell ss:StyleID='s63' ss:HRef='http://ap.cust.edu.tw/CIS/Print/teacher/SylDoc.do?Oid="+dtimeList.get(i).get("Oid")+"'><Data ss:Type='String'>http://ap.cust.edu.tw/CIS/Print/teacher/SylDoc.do?Oid="+dtimeList.get(i).get("Oid")+"</Data></Cell>");
+			out.println ("    <Cell ss:StyleID='s63' ss:HRef='http://ap.cust.edu.tw/CIS/Print/teacher/IntorDoc.do?Oid="+dtimeList.get(i).get("Oid")+"'><Data ss:Type='String'>http://ap.cust.edu.tw/CIS/Print/teacher/IntorDoc.do?Oid="+dtimeList.get(i).get("Oid")+"</Data></Cell>");
 			
 			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'></Data></Cell>");//備註
 			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'></Data></Cell>");//填表人
