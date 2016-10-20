@@ -1546,20 +1546,11 @@ public class TimeTable extends BaseAction{
 			out.println ("   <ProtectObjects>False</ProtectObjects>");
 			out.println ("   <ProtectScenarios>False</ProtectScenarios>");
 			out.println ("  </WorksheetOptions>");
-			out.println (" </Worksheet>");
+			out.println (" </Worksheet>");	
 			
-			
-			
-			
-			
+			if(extra)
 			extraPrint(out,Syear, Sterm, list.get(i).get("Name")+title, tmp, dtimeList, emplList, nabbrList, stdsList);
-			
-			
-			
-			
-			
-			
-			
+						
 		}		
 		
 		
@@ -1572,7 +1563,7 @@ public class TimeTable extends BaseAction{
 		
 		
 		
-		out.println (" <Worksheet ss:Name='"+name+"-1'>");
+		out.println (" <Worksheet ss:Name='"+name+"續'>");
 		out.println ("  <Table ss:ExpandedColumnCount='9' ss:ExpandedRowCount='17' x:FullColumns='1'");
 		out.println ("   x:FullRows='1' ss:StyleID='s57' ss:DefaultColumnWidth='54'");
 		out.println ("   ss:DefaultRowHeight='15.75'>");

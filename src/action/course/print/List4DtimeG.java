@@ -391,6 +391,7 @@ public class List4DtimeG extends BaseAction{
 			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+dtimeList.get(i).get("credit")+"</Data></Cell>");//學分數
 			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+dtimeList.get(i).get("thour")+"</Data></Cell>");//開課時數
 			// 實習時數
+			practical=false;
 			if (dtimeList.get(i).get("chi_name").toString().indexOf("實習") == -1) {    
 				out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>0</Data></Cell>");
 			} else {
@@ -410,9 +411,7 @@ public class List4DtimeG extends BaseAction{
 			+ dtimeList.get(i).get("Oid") + "'")+"</Data></Cell>");//男
 			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+df.sqlGetStr("SELECT COUNT(*)FROM Seld s, Dtime d, stmd st WHERE "
 			+ "s.Dtime_oid=d.Oid AND s.student_no=st.student_no AND st.sex='2' AND d.Oid='"
-			+ dtimeList.get(i).get("Oid") + "'")+"</Data></Cell>");//女
-			
-			
+			+ dtimeList.get(i).get("Oid") + "'")+"</Data></Cell>");//女			
 			language = "國語";
 			if ((dtimeList.get(i)).get("chi_name").toString().indexOf("日文") >= 0 || dtimeList.get(i).get("chi_name").toString().indexOf("日語") >= 0) {
 				language = "日語";
