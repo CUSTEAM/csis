@@ -60,24 +60,19 @@ public class List4Course35 extends BaseAction{
 		List<Map>pecode9=df.sqlGet("SELECT * FROM CODE_PE9");
 		List<Map>pecode11=df.sqlGet("SELECT * FROM CODE_PE11");
 		Map dtime;
-		for (int i = 0; i < dtimeList.size(); i++) {			
-			
-			dtime=df.sqlGetMap(("SELECT  c.*, d.techid, (SELECT COUNT(*)FROM Seld, stmd WHERE Seld.student_no=stmd.student_no AND stmd.sex='1' AND "
+		for (int i = 0; i < dtimeList.size(); i++) {
+			dtime=df.sqlGetMap(("SELECT d.Oid as dOid,  c.*, d.techid, (SELECT COUNT(*)FROM Seld, stmd WHERE Seld.student_no=stmd.student_no AND stmd.sex='1' AND "
 			+ "Seld.Dtime_oid=d.Oid)as cnt1, "
 			+ "(SELECT COUNT(*)FROM Seld WHERE Dtime_oid=d.Oid)as cnt, c.DeptNo,c.SchoolNo,"
 			+ "d.credit, d.thour,cs.cscode, cs.chi_name, cdo.name as opt, d.cscode FROM "
 			+ "Class c, Csno cs, Dtime d, CODE_DTIME_OPT cdo "
 			+ "WHERE c.ClassNo=d.depart_class AND cs.cscode=d.cscode AND d.opt=cdo.id AND d.Oid='"+dtimeList.get(i).get("Oid")+"' ORDER BY d.depart_class,d.cscode"));
 			
-			if (dtime.get("cscode").toString().equals("50000")
-					|| dtime.get("cscode").toString().equals("T0001")
-					|| dtime.get("cscode").toString().equals("T0002"))continue;
+			if (dtime.get("cscode").toString().equals("50000")|| dtime.get("cscode").toString().equals("T0001")|| dtime.get("cscode").toString().equals("T0002"))continue;
 
 			out.println("  <tr>");
 			// 課碼
-			out.println("<td align='center'>");
-			out.println(dtime.get("cscode"));
-			out.println("</td>");
+			out.println("<td align='center'>w"+dtime.get("dOid")+"</td>");
 			// 課名
 			out.println("<td align='left'>");
 			out.println(dtime.get("chi_name"));
@@ -197,7 +192,7 @@ public class List4Course35 extends BaseAction{
 
 			char SchoolNo=dtime.get("SchoolNo").toString().charAt(dtime.get("SchoolNo").toString().length()-1);
 			String School_id;
-			System.out.println(SchoolNo);
+			//System.out.println(SchoolNo);
 			if(SchoolNo=='G'){
 				School_id="G";
 			}else{
