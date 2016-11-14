@@ -381,7 +381,7 @@ public class List4Course35 extends BaseAction{
 									}
 							out.println("</tr>");
 						}else{
-							System.out.println("有問題!!");
+							System.out.println("!!");
 						}
 					}
 				}

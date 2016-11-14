@@ -113,7 +113,7 @@ function getSeldHist(stdNo){
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>第2學期選課管理</strong>    
 </div>
-<form action="AddSeldNext" method="post" class="form-inline">
+<form action="AddSeldNext" method="post" class="form-horizontal">
 <div class="panel panel-primary">
 <div class="panel-heading">查詢範圍</div>
 <table class="table">
@@ -151,11 +151,14 @@ function getSeldHist(stdNo){
 		    <span class="input-group-btn">
 		    <button class="btn btn-default" id="searchStd" name="method:searchStd" type="submit">查詢學生選課</button>		    		   
 			</span>
-		</div>&nbsp;
+		</div>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
 		<button class="btn btn-danger" name="method:createSeldByStd" type="submit">建立學生選課</button>
 		<button id="compel" style="display:none;" name="method:compel" type="submit">compel</button>
 		</td>
-		 
 	</tr>
 </table>
 <input type="hidden" name="Oid" value="" id="Oid"/>

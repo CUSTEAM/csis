@@ -356,21 +356,42 @@ public class List4DtimeG extends BaseAction{
 			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+depType+"</Data></Cell>");
 			
 			//專兼任
-			if(dtimeTeacher.size()>0){
+			/*if(dtimeTeacher.size()>0){
 				out.print ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>");
-				if(dtimeList.get(i).get("cname")!=null){
+				if(dtimeList.get(i).get("cname")!=null){					
 					sb=new StringBuilder();
 					for(int j=0; j<dtimeTeacher.size(); j++){
 						sb.append(dtimeTeacher.get(j).get("cat1")+",");						
 					}
 					sb.delete(sb.length()-1, sb.length());
-					out.print(dtimeList.get(i).get("cat1")+","+sb.toString());
+					out.print ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>");
+					if(dtimeList.get(i).get("cname")!=null){
+						out.print(dtimeList.get(i).get("cat1")+","+sb);
+					}else{
+						out.print(sb.toString());
+					}
 				}
 				out.print ("    </Data></Cell>");
 			}else{					
 				out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+dtimeList.get(i).get("cat1")+"</Data></Cell>");
-			}
-			
+			}*/
+			if(dtimeTeacher.size()>0){
+				sb=new StringBuilder();
+				for(int j=0; j<dtimeTeacher.size(); j++){
+					sb.append(dtimeTeacher.get(j).get("cat1")+",");						
+				}
+				sb.delete(sb.length()-1, sb.length());
+				out.print ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>");//聘書職級碼
+				if(dtimeList.get(i).get("cname")!=null){
+					out.print( dtimeList.get(i).get("cat1")+","+sb);
+				}else{
+					out.print(sb);
+				}
+				out.println ("    </Data></Cell>");
+			}else{
+				out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+
+				dtimeList.get(i).get("cat1")+"</Data></Cell>");
+			}			
 			
 			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+dtimeList.get(i).get("chi_name")+"</Data></Cell>");
 			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+dtimeList.get(i).get("eng_name")+"</Data></Cell>");
