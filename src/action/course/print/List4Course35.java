@@ -35,6 +35,7 @@ public class List4Course35 extends BaseAction{
 
 		out.println("<table border='1'>");
 		out.println("<tr>");
+		out.println("<td align='center'>課程編號 </td>");
 		out.println("<td align='center'>當期課號</td>");
 		out.println("<td align='center'>課程名稱</td>");
 		out.println("<td align='center'>修別</td>");
@@ -71,6 +72,7 @@ public class List4Course35 extends BaseAction{
 			if (dtime.get("cscode").toString().equals("50000")|| dtime.get("cscode").toString().equals("T0001")|| dtime.get("cscode").toString().equals("T0002"))continue;
 
 			out.println("  <tr>");
+			out.println("<td align='center'>"+dtime.get("cscode")+"</td>");
 			// 課碼
 			out.println("<td align='center'>w"+dtime.get("dOid")+"</td>");
 			// 課名
