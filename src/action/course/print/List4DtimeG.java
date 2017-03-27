@@ -203,7 +203,7 @@ public class List4DtimeG extends BaseAction{
 		+ "CODE_DTIME_OPT cdo, Csno cs, Class c WHERE cd.id=c.DeptNo AND c.ClassNo=d.depart_class AND cs.cscode=d.cscode AND "
 		+ "d.opt=cdo.id AND d.Oid IN(");*/
 		StringBuilder sb=new StringBuilder("SELECT IFNULL(d.Introduction,'')as Introduction, IFNULL(d.Syllabi,'')as Syllabi, IFNULL(d.Syllabi_sub,'')as Syllabi_sub,cd.ename, d.Oid, d.elearning, cs.eng_name, c.Grade, c.DeptNo, cd.name as DeptName,c.CampusNo, c.SchoolNo, "
-		+ "c.ClassNo, c.ShortName, c.graduate, d.thour, d.credit,ce.idno as pid, IFNULL(ce.name,'') as pname, e.unit as idno2, e.cname, IFNULL(e.category,'') as cat1, cs.chi_name, "
+		+ "c.ClassNo, c.ShortName, c.graduate, d.thour, d.credit,ce.idno as pid, ce.name as pname, e.unit as idno2, IFNULL(e.sname,'')as sname, e.cname, IFNULL(e.category,'') as cat1, cs.chi_name, "
 		+ "d.cscode, d.techid as techid, d.opt, cdo.name as opt2, d.thour, d.credit, (SELECT COUNT(*)FROM Seld WHERE Dtime_oid=d.Oid)as cnt FROM "
 		+ "(Dtime d LEFT OUTER JOIN empl e ON e.idno=d.techid)LEFT OUTER JOIN CodeEmpl ce ON e.pcode=ce.idno,CODE_DEPT cd,"
 		+ "CODE_DTIME_OPT cdo, Csno cs, Class c WHERE cd.id=c.DeptNo AND c.ClassNo=d.depart_class AND cs.cscode=d.cscode AND "
@@ -225,8 +225,9 @@ public class List4DtimeG extends BaseAction{
 		List<Map>csGroup;
 		
 		List<Map>dtimeTeacher;
-		String language, language1, depType, emplType;
-		for (int i = 0; i < dtimeList.size(); i++) {			
+		String language, language1, depType, emplType, pName;
+		for (int i = 0; i < dtimeList.size(); i++) {	
+			
 			/*if(dtimeList.get(i).get("Syllabi_sub").toString().length()>4000){
 				System.out.println(dtimeList.get(i).get("Oid"));
 				
@@ -290,12 +291,14 @@ public class List4DtimeG extends BaseAction{
 			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'></Data></Cell>");//
 			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'></Data></Cell>");//
 			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'></Data></Cell>");//
-			dtimeTeacher=df.sqlGet("SELECT e.cname, ce.idno as pid, IFNULL(ce.name,'無職稱') as pname, e.category as cat1 FROM empl e "
+			dtimeTeacher=df.sqlGet("SELECT IFNULL(e.sname,'')as sname, e.cname, ce.idno as pid, ce.name as pname, e.category as cat1 FROM empl e "
 			+ "LEFT OUTER JOIN CodeEmpl ce ON e.pcode=ce.idno, Dtime_teacher d WHERE e.idno=d.teach_id AND d.Dtime_oid="+
 			dtimeList.get(i).get("Oid"));			
 			//System.out.println(dtimeTeacher.size());			
+			
 			//教師分類碼
 			out.print ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>");			
+			//多教師
 			if(dtimeTeacher.size()>0){
 				sb=new StringBuilder();
 				for(int j=0; j<dtimeTeacher.size(); j++){
@@ -315,18 +318,41 @@ public class List4DtimeG extends BaseAction{
 			if(dtimeTeacher.size()>0){
 				sb=new StringBuilder();
 				for(int j=0; j<dtimeTeacher.size(); j++){
-					sb.append(dtimeTeacher.get(j).get("pname")+",");						
+					if(dtimeTeacher.get(j).get("pname")==null||dtimeTeacher.get(j).get("pname").equals("")){
+						sb.append(dtimeTeacher.get(j).get("sname")+",");
+					}else{
+						sb.append(dtimeTeacher.get(j).get("pname")+",");
+					}
+											
 				}
 				sb.delete(sb.length()-1, sb.length());
 				out.print ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>");
 				if(dtimeList.get(i).get("cname")!=null){
-					out.print(dtimeList.get(i).get("pname")+","+sb);
+					
+					if(dtimeList.get(i).get("pname")==null||dtimeList.get(i).get("pname").equals("")){
+						
+						out.print(dtimeList.get(i).get("sname")+","+sb);
+					}else{
+						out.print(dtimeList.get(i).get("pname")+","+sb);
+					}
+					
 				}else{
 					out.print(sb.toString());
 				}
+				
 				out.println ("    </Data></Cell>");
 			}else{					
-				out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+dtimeList.get(i).get("pname")+"</Data></Cell>");
+				
+				if(dtimeList.get(i).get("pname")==null||dtimeList.get(i).get("pname").equals("")){
+					out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+dtimeList.get(i).get("sname")+"</Data></Cell>");
+					
+				}else{
+					out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+dtimeList.get(i).get("pname")+"</Data></Cell>");
+					
+				}
+				
+				
+			
 			}		
 			if(dtimeTeacher.size()>0){
 				sb=new StringBuilder();
