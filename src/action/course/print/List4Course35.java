@@ -55,6 +55,8 @@ public class List4Course35 extends BaseAction{
 		out.println("<td align='center'>授課時數</td>");
 		out.println("<td align='center'>系所代碼</td>");
 		out.println("<td>學制代碼</td>");
+		out.println("<td>專業技術</td>");
+		out.println("<td>專業英語</td>");
 		out.println("</tr>");
 		String language;
 		List dtimeTeacherTmp;
@@ -62,7 +64,7 @@ public class List4Course35 extends BaseAction{
 		List<Map>pecode11=df.sqlGet("SELECT * FROM CODE_PE11");
 		Map dtime;
 		for (int i = 0; i < dtimeList.size(); i++) {
-			dtime=df.sqlGetMap(("SELECT d.Oid as dOid,  c.*, d.techid, (SELECT COUNT(*)FROM Seld, stmd WHERE Seld.student_no=stmd.student_no AND stmd.sex='1' AND "
+			dtime=df.sqlGetMap(("SELECT d.y_pro, d.y_pro_eng,d.Oid as dOid,  c.*, d.techid, (SELECT COUNT(*)FROM Seld, stmd WHERE Seld.student_no=stmd.student_no AND stmd.sex='1' AND "
 			+ "Seld.Dtime_oid=d.Oid)as cnt1, "
 			+ "(SELECT COUNT(*)FROM Seld WHERE Dtime_oid=d.Oid)as cnt, c.DeptNo,c.SchoolNo,"
 			+ "d.credit, d.thour,cs.cscode, cs.chi_name, cdo.name as opt, d.cscode FROM "
@@ -372,10 +374,23 @@ public class List4Course35 extends BaseAction{
 								//}
 							}
 						}
-						out.println("</td>");
+				out.println("</td>");
 				
 				
-						out.println("</tr>");
+				if(dtime.get("y_pro").equals("0")){
+					out.println("<td>否</td>");
+				}else{
+					out.println("<td>是</td>");
+				}
+				if(dtime.get("y_pro_eng").equals("0")){
+					out.println("<td>否</td>");
+				}else{
+					out.println("<td>是</td>");
+				}
+				
+				
+				
+				out.println("</tr>");
 			}
 			
 			

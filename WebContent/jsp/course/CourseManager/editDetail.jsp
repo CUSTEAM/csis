@@ -76,6 +76,23 @@
 		  	<span class="input-group-addon">科目名稱</span>
 				<input type="text" class="form-control cscode" name="cscode" id="cscode" value="${cs.cscode},${cs.chi_name}" onClick="this.value='';" autocomplete="off" data-provide="typeahead"/>
 			</div>
+			
+			<div class="input-group">
+		  	<span class="input-group-addon">專業技術</span>
+            <select name="y_pro" class="form-control">		
+				<option <c:if test="${cs.y_pro eq'1'}">selected</c:if> value="1">是</option>
+				<option <c:if test="${cs.y_pro eq'0'}">selected</c:if> value="0">否</option>
+				
+			</select>
+        	</div>			
+			
+			<div class="input-group">
+		  	<span class="input-group-addon">專業英語</span>
+            <select name="y_pro_eng" class="form-control">
+				<option <c:if test="${cs.y_pro_eng eq'1'}">selected</c:if> value="1">是</option>
+				<option <c:if test="${cs.y_pro_eng eq'0'}">selected</c:if> value="0">否</option>				
+			</select>
+        	</div>
 		</td>
 	</tr>
 	<tr>

@@ -43,6 +43,26 @@ public class Dtime {
 	private String syllabiSub;
 	
 	private String nonSeld;
+	
+	private String y_pro;
+	
+	private String y_pro_eng;
+
+	public String getY_pro() {
+		return y_pro;
+	}
+
+	public void setY_pro(String y_pro) {
+		this.y_pro = y_pro;
+	}
+
+	public String getY_pro_eng() {
+		return y_pro_eng;
+	}
+
+	public void setY_pro_eng(String y_pro_eng) {
+		this.y_pro_eng = y_pro_eng;
+	}
 
 	public String getNonSeld() {
 		return nonSeld;

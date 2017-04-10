@@ -92,5 +92,18 @@
                 <comment>週#ln;章#ln;內容#ln;時數</comment>
             </column>
         </property>
+        
+        <property name="y_pro" type="java.lang.String">
+            <column name="y_pro" length="1" not-null="false">
+                <comment>雲科-專業科目:1:專業,2技術</comment>
+            </column>
+        </property>
+        
+        <property name="y_pro_eng" type="java.lang.String">
+            <column name="y_pro_eng" length="1" not-null="false">
+                <comment>專業英文</comment>
+            </column>
+        </property>
+        
     </class>
 </hibernate-mapping>

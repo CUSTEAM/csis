@@ -101,7 +101,7 @@ public class CourseManagerBase extends BaseAction{
 	 */
 	public List<Map>getDtimeList(){			
 		StringBuilder sb=new StringBuilder("SELECT e.category, ce.sname as eleName, IFNULL(e.cname,'')as cname,(SELECT COUNT(*)FROM Seld WHERE Dtime_oid=d.Oid)as cnt, d.Select_Limit," +
-		"d.Oid, cd.name as optName, cs.cscode,cs.chi_name, d.credit, c.ClassName, d.thour FROM CODE_DTIME_ELEARNING ce, CODE_DTIME_OPT cd," +
+		"d.Oid, cd.name as optName, cs.cscode,cs.chi_name, d.credit, c.ClassName, d.thour, d.y_pro, d.y_pro_eng FROM CODE_DTIME_ELEARNING ce, CODE_DTIME_OPT cd," +
 		"Dtime d LEFT OUTER JOIN empl e ON d.techid=e.idno, Csno cs, Class c WHERE d.elearning=ce.id AND cd.id=d.opt AND d.cscode=cs.cscode AND d.depart_class=c.ClassNo AND " +		
 		"d.Sterm='"+Sterm+"'");
 		
@@ -116,6 +116,9 @@ public class CourseManagerBase extends BaseAction{
 		if(!dno.equals(""))sb.append("AND c.DeptNo='"+dno+"'");
 		if(!gno.equals(""))sb.append("AND c.Grade='"+gno+"'");
 		if(!zno.equals(""))sb.append("AND c.SeqNo='"+zno+"'");
+		
+		if(!y_pro.equals(""))sb.append("AND d.y_pro='"+y_pro+"'");
+		if(!y_pro_eng.equals(""))sb.append("AND d.y_pro_eng='"+y_pro_eng+"'");
 		
 		if(techid.indexOf(",")>0){//test empty for techid
 			sb.append("AND e.idno ='"+df.sqlGetStr("SELECT idno FROM empl WHERE Oid="+techid.substring(0, techid.indexOf(",")))+"' ");
@@ -205,7 +208,7 @@ public class CourseManagerBase extends BaseAction{
 	 */
 	public String edit(){
 		
-		Map<String, String>map=df.sqlGetMap("SELECT d.nonSeld, d.Oid, d.Sterm, d.opt, d.credit, d.thour, d.elearning, d.extrapay, d.Select_LImit," +
+		Map<String, String>map=df.sqlGetMap("SELECT d.y_pro, d.y_pro_eng,d.nonSeld, d.Oid, d.Sterm, d.opt, d.credit, d.thour, d.elearning, d.extrapay, d.Select_LImit," +
 		"cs.cscode, cs.chi_name, e.Oid as techid, e.cname, c.SchoolType, c.CampusNo, c.SchoolNo, c.DeptNo, Grade, SeqNo, c.ClassName FROM " +
 		"Dtime d LEFT OUTER JOIN empl e ON d.techid=e.idno, Csno cs, Class c WHERE " +
 		"d.cscode=cs.cscode AND d.depart_class=c.ClassNo AND d.Oid="+Dtime_oid);	
@@ -525,10 +528,15 @@ public class CourseManagerBase extends BaseAction{
 		d.setThour(1);
 		d.setSterm(Sterm);
 		d.setSelectLimit(50);
+		d.setY_pro(y_pro);
+		d.setY_pro_eng(y_pro_eng);
 		d.setCoansw(0f);
 		if(ele.equals("")){d.setElearning("0");}else{d.setElearning(ele);}
 		if(pay.equals("")){d.setExtrapay("0");}else{d.setExtrapay(pay);}
 		if(nonSeld.equals("")){d.setNonSeld("0");}else{d.setNonSeld(nonSeld);}
+		
+		if(!y_pro.equals("")){d.setY_pro(y_pro);}else{d.setY_pro("0");}
+		if(!y_pro_eng.equals("")){d.setY_pro_eng(y_pro_eng);}else{d.setY_pro_eng("0");}
 		df.update(d);
 		Dtime_oid=d.getOid().toString();
 		
@@ -720,10 +728,14 @@ public class CourseManagerBase extends BaseAction{
 		d.setNonSeld(nonSeld);		
 		d.setCscode(cscode);
 		d.setDepartClass(depart_class);
+		
+		if(!y_pro.equals("")){d.setY_pro(y_pro);}else{d.setY_pro(null);}
+		if(!y_pro_eng.equals("")){d.setY_pro_eng(y_pro_eng);}else{d.setY_pro_eng(null);}
 			
 		try{
 			df.update(d);	
 		}catch(Exception e){
+			e.printStackTrace();
 			msg.setError("儲存失敗, 請檢查各欄位資料");
 			savMessage(msg);
 			return edit();
@@ -835,6 +847,8 @@ public class CourseManagerBase extends BaseAction{
 	public String ele;//遠距型態
 	public String pay;//實習費
 	public String cno, sno, dno, gno, zno;
+	
+	public String y_pro, y_pro_eng;
 	
 	public String[] cidno, sidno, didno, grade, classes;	
 	public String[] cscodes, techids, hours, stds, week, begin, end, place;
