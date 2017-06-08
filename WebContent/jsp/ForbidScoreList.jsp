@@ -55,43 +55,48 @@ $(document).ready(function() {
 </div>
 
 <form action="ForbidScoreList" method="post" class="form-inline">
+
+<div class="panel panel-primary">
+<div class="panel-heading">查詢</div>
 <table class="table">
 	<tr>
-		<td class="text-info" nowrap>班級範圍</td>
-		<td class="control-group info" nowrap>
+		<td nowrap>
 			<%@ include file="/inc/jsp-kit/dhnSelector.jsp"%>
 		</td>
 
-		<td class="control-group info" width="100%">				
+		<td  width="100%">				
 		<div class="input-append control-group info" style="float:left;">			
-			<select name="grade">
+			<select class="form-control" name="grade">
 				<option <c:if test="${grade eq ''}">selected</c:if> value="">全部</option>
 				<option <c:if test="${grade eq '0'}">selected</c:if> value="0">非畢業班</option>
 				<option <c:if test="${grade eq '1'}">selected</c:if> value="1">畢業班</option>
 			</select>
-		    <button class="btn btn-info" name="method:print" type="submit">名單列印</button>
-		</div>	
-		<div id="funbtn" rel="popover" title="說明" 
+		    <button class="btn btn-primary" name="method:print" type="submit">名單列印</button>
+		    <div id="funbtn" rel="popover" title="說明" 
 		data-content="列印或查詢個別學生1/3缺課標記，學期結束建立歷年成績時，系統將以0分匯入" 
 		data-placement="right" class="btn btn-warning">?</div>	
+		</div>	
+		
 		</td>
 		<td width="100%"></td>
 	</tr>
 
 	<tr>
-		<td class="text-info" nowrap>學號姓名</td>
-		<td width="100%" colspan="2">
-		<div class="input-append control-group info">
-			<input class="span4" onClick="$('#idiot').val(''), $('#stdNo').val('');" autocomplete="off" type="text" id="idiot" value="${nameno}" name="nameno"
-			 data-provide="typeahead" onClick="addStd()" placeholder="學號或姓名" />
-			<input type="hidden" id="stdNo" value="${stdNo}" name="stdNo"/>
-		    <button class="btn btn-info" name="method:search" type="submit">學生個人記錄</button>
+		<td colspan="2">
+		<input type="hidden" id="stdNo" value="${stdNo}" name="stdNo"/>
+		<div class="input-group">
+			<input onClick="$('#idiot').val(''), $('#stdNo').val('');" autocomplete="off" 
+			type="text" id="idiot" value="${nameno}" name="nameno" class="form-control"
+			data-provide="typeahead" onClick="addStd()" placeholder="學號或姓名" />
+			<span class="input-group-btn">
+		    <button class="btn btn-danger" name="method:search" type="submit">修改學生記錄</button>
+		    </span>
 		</div>	
 		</td>
 		<td width="100%"></td>
 	</tr>
 </table>
-
+</div>
 <c:if test="${!empty std}">
 <table class="table control-group info text-info">
 	<tr>
@@ -108,7 +113,7 @@ $(document).ready(function() {
 	<tr>
 		<td nowrap>
 		<input type="hidden" name="Oid" value="${s.Oid}"/>
-		<select name="status" disabled>
+		<select name="status" class="form-control">
 			<option value="">無標記</option>
 			<option <c:if test="${s.status eq'1' }">selected</c:if> value="1">標記為1/3缺課</option>			
 		</select>
@@ -119,10 +124,11 @@ $(document).ready(function() {
 		<td nowrap>${s.chi_name}</td>
 		<td nowrap>${s.cnt}</td>
 		<td nowrap>${s.score}</td>
-		<td width="100%"><button class="btn btn-danger btn-small" name="method:save" disabled type="submit">儲存修改</button></td>
+		<td width="100%"><button class="btn btn-danger btn-small" name="method:save" type="submit">儲存修改</button></td>
 	</tr>
 	</c:forEach>
 </table>
+
 </c:if>
 
 

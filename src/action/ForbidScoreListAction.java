@@ -36,12 +36,16 @@ public class ForbidScoreListAction extends BaseAction{
 	}
 	
 	public String save() throws Exception{
-		
+		//Map s;
 		for(int i=0; i<Oid.length; i++){
-			if(!status[i].equals("")){
+			if(!status[i].equals("")){				
 				df.exSql("UPDATE Seld SET status='1' WHERE Oid="+Oid[i]);
 			}else{
+				//s=df.sqlGetMap("SELECT s.student_no, d.depart_class, d.cscode "
+				//+ "FROM Seld s, Dtime d WHERE d.Oid=s.Dtime_oid AND s.Oid="+Oid[i]);
 				df.exSql("UPDATE Seld SET status=null WHERE Oid="+Oid[i]);
+				//df.exSql("INSERT INTO SeldHist(StudentNo, depart_class, cscode, idno, type)"
+				//+ "VALUES('"+s.get("student_no")+"', '"+s.get("depart_class")+"', '"+s.get("cscode")+"', '"+getSession().getAttribute("userid")+"', 'E');");
 			}
 		}
 		
