@@ -50,13 +50,14 @@ public class List4Course35 extends BaseAction{
 		out.println("<td align='center'>畢業班課程</td>");
 		out.println("<td align='center'>寒暑別</td>");
 		out.println("<td align='center'>全程使用外語</td>");
+		out.println("<td>專業英語</td>");
 		out.println("<td align='center'>身份識別種類</td>");
 		out.println("<td align='center'>身份識別號</td>");
 		out.println("<td align='center'>授課時數</td>");
 		out.println("<td align='center'>系所代碼</td>");
 		out.println("<td>學制代碼</td>");
-		out.println("<td>專業技術</td>");
-		out.println("<td>專業英語</td>");
+		//out.println("<td>專業技術</td>");
+		
 		out.println("</tr>");
 		String language;
 		List dtimeTeacherTmp;
@@ -324,6 +325,13 @@ public class List4Course35 extends BaseAction{
 				out.println("<td align='center'>");
 				out.println("否");
 				out.println("</td>");
+				
+				//專業英語
+				if(dtime.get("y_pro_eng").equals("0")){
+					out.println("<td>否</td>");
+				}else{
+					out.println("<td>是</td>");
+				}
 
 				// 身份識別種類
 				out.println("<td align='center'>");
@@ -376,17 +384,14 @@ public class List4Course35 extends BaseAction{
 						}
 				out.println("</td>");
 				
+				//專業課程
+				/*if(dtime.get("y_pro").equals("0")){
+					out.println("<td>否</td>");
+				}else{
+					out.println("<td>是</td>");
+				}*/
 				
-				if(dtime.get("y_pro").equals("0")){
-					out.println("<td>否</td>");
-				}else{
-					out.println("<td>是</td>");
-				}
-				if(dtime.get("y_pro_eng").equals("0")){
-					out.println("<td>否</td>");
-				}else{
-					out.println("<td>是</td>");
-				}
+				
 				
 				
 				

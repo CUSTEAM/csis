@@ -11,7 +11,7 @@
 <script src="/eis/inc/js/plugin/stupidtable.min.js"></script>
 <script src="/eis/inc/js/plugin/bootstrap-tooltip.js"></script>
 <link href="/eis/inc/css/jquery-ui.css" rel="stylesheet"/>
-<script src="inc/js/autoComplete.js"></script>
+<script src="/eis/inc/js/autoComplete.js"></script>
 
 </head>
 <body>
