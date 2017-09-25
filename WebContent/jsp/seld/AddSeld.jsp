@@ -194,8 +194,8 @@ function getSeldHist(stdNo){
 		    列印 <span class="caret"></span>
 		  </button>
 		  <ul class="dropdown-menu">
-		    <li><a href="SylDoc?Dtime_oid=${c.Oid}">課程大綱</a></li>
-		    <li><a href="IntorDoc?Dtime_oid=${c.Oid}">中英文簡介</a></li>
+		    <li><a href="/pis/SylDoc?Dtime_oid=${c.Oid}">課程大綱</a></li>
+		    <li><a href="/pis/IntorDoc?Dtime_oid=${c.Oid}">中英文簡介</a></li>
 		    <li role="separator" class="divider"></li>
 		    <li><a href="DtimeSelds?Dtime_oid=${c.Oid}">選課學生</a></li>
 		  </ul>
