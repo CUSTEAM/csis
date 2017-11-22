@@ -559,6 +559,7 @@ public class CourseManagerBase extends BaseAction{
 		df.exSql("DELETE FROM Dtime_teacher WHERE Dtime_oid="+Dtime_oid);//刪多教師
 		df.exSql("DELETE FROM Dtime_block WHERE Dtime_oid="+Dtime_oid);//刪跨選
 		df.exSql("DELETE FROM Dtime WHERE Oid="+Dtime_oid);//刪課程
+		df.exSql("INSERT INTO SYS_LOG(action,cname,note)VALUES('/csis/CourseManager','"+getSession().getAttribute("userid")+"','將"+Dtime_oid+"刪除');");
 		Message msg=new Message();
 		msg.setSuccess("刪除完成");
 		savMessage(msg);

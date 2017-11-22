@@ -52,7 +52,7 @@
 			    <ul class="dropdown-menu">
 			    	<li><a class="btn btn-link" href="/pis/SylDoc?Dtime_oid=${c.Oid}">課程大綱</a></li>
 			    	<li><a class="btn btn-link" href="/pis/IntorDoc?Dtime_oid=${c.Oid}">中英文簡介</a></li>
-			    	<li><a class="btn btn-link" href="/pis/DtimeSelds?Oid=${c.Oid}">選課學生</a></li>
+			    	<li><a class="btn btn-link" href="DtimeSelds?Oid=${c.Oid}">選課學生</a></li>
 			    </ul>
 			    </div>
 	   		</td>
