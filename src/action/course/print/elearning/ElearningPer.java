@@ -8,14 +8,13 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import action.BaseAction;
+import action.BasePrintXmlAction;
 
-public class ElearningPer extends BaseAction{
+public class ElearningPer extends BasePrintXmlAction{
 	
 	public void print(HttpServletResponse response) throws IOException{
 		Date date=new Date();
-		response.setContentType("application/vnd.ms-excel; charset=UTF-8");
-		response.setHeader("Content-disposition","attachment;filename="+date.getTime()+".xls");				
+		xml2ods(response, getRequest(), date);
 		PrintWriter out=response.getWriter();	
 		out.println("<html>");
 		out.println("<head><style>body{background-color:#cccccc;}td{font-size:18px;color:#333333;font-family:新細明體}</style>");

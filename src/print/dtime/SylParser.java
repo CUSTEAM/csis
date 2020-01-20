@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import action.BaseAction;
+import action.BasePrintXmlAction;
 
-public class SylParser extends BaseAction {
+public class SylParser extends BasePrintXmlAction {
 	
 	/**
 	 * 解析簡介

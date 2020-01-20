@@ -9,15 +9,13 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import action.BaseAction;
+import action.BasePrintXmlAction;
 
-public class ExamPacketFace extends BaseAction{
+public class ExamPacketFace extends BasePrintXmlAction{
 	
 	public void print(HttpServletResponse response, List<Map>dtimeList, String year, String term) throws IOException{		
 		Date date=new Date();
-		//response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
-		response.setContentType("application/vnd.ms-excel; charset=UTF-8");
-		response.setHeader("Content-disposition","attachment;filename="+date.getTime()+".xls");				
+		xml2ods(response, getRequest(), date);	
 		PrintWriter out=response.getWriter();
 		
 		

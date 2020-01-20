@@ -1,12 +1,14 @@
 package action.course;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import model.Dtime;
+import model.DtimeClass;
 import model.Message;
 import print.dtime.IntorDoc;
 import print.dtime.SylDoc;
@@ -16,6 +18,7 @@ import action.course.print.ClassTimetable40;
 import action.course.print.CourseCounterTeacher;
 import action.course.print.CsCoansw;
 import action.course.print.ExamPacketFace;
+import action.course.print.List4211;
 import action.course.print.List4Course35;
 import action.course.print.List4Dtime13;
 import action.course.print.List4Dtime32;
@@ -105,6 +108,7 @@ public class CourseManagerBase extends BaseAction{
 		"Dtime d LEFT OUTER JOIN empl e ON d.techid=e.idno, Csno cs, Class c WHERE d.elearning=ce.id AND cd.id=d.opt AND d.cscode=cs.cscode AND d.depart_class=c.ClassNo AND " +		
 		"d.Sterm='"+Sterm+"'");
 		
+		if(!location.equals(""))sb.append("AND d.Oid IN(SELECT Dtime_oid FROM Dtime_class WHERE place='"+location.substring(0, location.indexOf(","))+"')");
 		
 		if(!opt.equals(""))sb.append("AND d.opt='"+opt+"'");
 		if(!ele.equals(""))sb.append("AND d.elearning='"+ele+"'");
@@ -223,7 +227,7 @@ public class CourseManagerBase extends BaseAction{
 		//擋修
 		request.setAttribute("db", df.sqlGet("SELECT c.chi_name, d.* FROM Dtime_block d, Csno c WHERE d.cscode=c.cscode AND d.Dtime_oid="+Dtime_oid));
 		//修改記錄
-		request.setAttribute("dh", df.sqlGet("SELECT d.*, e.cname FROM Dtime_edit_hist d LEFT OUTER JOIN empl e ON d.auditor=e.idno WHERE d.Dtime_oid="+Dtime_oid));
+		request.setAttribute("dh", df.sqlGet("SELECT d.*, e.cname FROM Dtime_edit_hist d LEFT OUTER JOIN empl e ON d.auditor=e.idno WHERE d.Dtime_oid="+Dtime_oid+" ORDER BY d.edate DESC"));
 		
 		cno=map.get("CampusNo");
 		sno=map.get("SchoolNo");
@@ -367,6 +371,7 @@ public class CourseManagerBase extends BaseAction{
 	 */
 	public String print() throws IOException{	
 		String Syear=getContext().getAttribute("school_year").toString();
+		//System.out.println(print);
 		switch(print) { 
 			//通用報表
         	case "ListDtime": ListDtime ld=new ListDtime();
@@ -482,6 +487,11 @@ public class CourseManagerBase extends BaseAction{
         	case"List4Course35":List4Course35 list4Course35=new List4Course35();
         	list4Course35.print(response, getDtimeList(), (String)getContext().getAttribute("school_year"), (String)getContext().getAttribute("school_term"));
         	break;
+        	
+        	//List4Course35
+        	case"List4211":List4211 List4211=new List4211();
+        	List4211.print(response, cno,sno,dno,gno,zno);
+        	break;
         
 	        default:Message msg=new Message();
 	        msg.setError("無報表對應程式");
@@ -573,12 +583,44 @@ public class CourseManagerBase extends BaseAction{
 	public String saveDtimeClass(){
 		request.setAttribute("timeTable", true);
 		Message msg=new Message();	
-		df.exSql("DELETE FROM Dtime_class WHERE Dtime_oid="+Dtime_oid);//刪除資料庫中現存
+		df.exSql("DELETE FROM Dtime_class WHERE Dtime_oid="+Dtime_oid);//刪除資料庫中現存全部排課
+		
+		DtimeClass dc;
 		for(int i=0; i<week.length; i++){
+			
 			if(!week[i].equals("")&&!begin[i].equals("")&&!end[i].equals("")){
+				
+				
+				dc=new DtimeClass();
+				dc.setDtimeOid(Integer.parseInt(Dtime_oid));
+				dc.setWeek(Integer.parseInt(week[i]));
+				dc.setBegin(begin[i]);
+				dc.setEnd(end[i]);	
+				try {
+					dc.setPlace(place[i].substring(0, place[i].indexOf(",")));
+				}catch(Exception e) {
+					dc.setPlace(null);
+				}
+				
+				
+				//該死的學分班
+				if(Integer.parseInt(Sterm)>2)
+				if(!beginDate[i].equals("")&& !endDate[i].equals("")) {
+					
+					try {
+						dc.setBeginDate(sf.parse(beginDate[i]));
+						dc.setEndDate(sf.parse(endDate[i]));
+					}catch(Exception e) {
+						e.printStackTrace();
+					}
+					
+				}
+				
 				try{	
-					df.exSql("INSERT INTO Dtime_class(week,begin,end,place,Dtime_oid)VALUES('"+week[i]+"','"+begin[i]+"','"+end[i]+"','"+getPlace(place[i])+"',"+Dtime_oid+");");
-				}catch(Exception e){					
+					//df.exSql("INSERT INTO Dtime_class(week,begin,end,place,Dtime_oid)VALUES('"+week[i]+"','"+begin[i]+"','"+end[i]+"','"+getPlace(place[i])+"',"+Dtime_oid+");");
+					df.update(dc);
+				}catch(Exception e){
+					e.printStackTrace();
 					msg.setError("排課重複");
 					savMessage(msg);
 					return edit();
@@ -852,15 +894,17 @@ public class CourseManagerBase extends BaseAction{
 	public String y_pro, y_pro_eng;
 	
 	public String[] cidno, sidno, didno, grade, classes;	
-	public String[] cscodes, techids, hours, stds, week, begin, end, place;
+	public String[] cscodes, techids, hours, stds, week, begin, end, place, beginDate, endDate;
 	
+	
+	public String location;
 	public String print;//報表型態
+	
+	SimpleDateFormat sf=new SimpleDateFormat("yyyy-MM-dd");
 	
 	private void saveLog(){
 		
 		
-	}
-	
-	
+	}	
 
 }

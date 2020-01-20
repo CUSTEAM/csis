@@ -6,11 +6,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
+import action.BasePrintXmlAction;
 
-import action.BaseAction;
-
-public class DtimeSelds extends BaseAction{
+public class DtimeSelds extends BasePrintXmlAction{
 	
 	
 	public String execute() throws IOException{
@@ -21,8 +19,8 @@ public class DtimeSelds extends BaseAction{
 				+ "stmd st, Class c,Dtime d, Csno cs WHERE cs.cscode=d.cscode AND d.oid="+Oid+" AND c.ClassNo=st.depart_class AND s.student_no=st.student_no AND s.Dtime_oid="+Oid+" ORDER BY c.DeptNo, s.student_no");
 		
 		Date date=new Date();
-		response.setContentType("application/vnd.ms-excel; charset=UTF-8");
-		response.setHeader("Content-disposition","attachment;filename="+date.getTime()+".xls");		
+		xml2ods(response, getRequest(), date);
+				
 		PrintWriter out=response.getWriter();
 		out.println("<html>");
 		out.println("<head><style>body{background-color:#cccccc;}td{font-size:18px;color:#333333;font-family:新細明體;mso-number-format:\\@;}</style>");

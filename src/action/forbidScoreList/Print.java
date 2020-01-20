@@ -19,7 +19,7 @@ public class Print {
 		Date date=new Date();
 		response.setContentType("text/html; charset=UTF-8");
 		response.setContentType("application/vnd.ms-excel");
-		response.setHeader("Content-disposition","attachment;filename="+date.getTime()+".xls");
+		
 		
 		
 		

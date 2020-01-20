@@ -2,25 +2,25 @@ package action.course.print;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
+import action.BasePrintXmlAction;
 
-import action.BaseAction;
-
-public class List4DtimeG extends BaseAction{
+public class List4DtimeG extends BasePrintXmlAction{
+	
+	List<Map>Pecode9=df.sqlGet("SELECT * FROM Pecode9");
 	
 	public void print(HttpServletResponse response, List<Map>dtimeList, String year, String term) throws IOException{
 		
 		Date date=new Date();
 		//SimpleDateFormat sf=new SimpleDateFormat("yyyy/MM/dd HH:mm");
-		response.setContentType("application/vnd.ms-excel; charset=UTF-8");
-		response.setHeader("Content-disposition","attachment;filename="+date.getTime()+".xls");			
+		xml2ods(response, getRequest(), date);
+		List<Map>cls;	
+		//StringBuilder clsinfo;
 		PrintWriter out=response.getWriter();
 		out.println ("<?xml version='1.0'?>");
 		out.println ("<?mso-application progid='Excel.Sheet'?>");
@@ -85,7 +85,7 @@ public class List4DtimeG extends BaseAction{
 		out.println ("  <Names>");
 		out.println ("   <NamedRange ss:Name='Print_Titles' ss:RefersTo='=SHEET1!R1'/>");
 		out.println ("  </Names>");
-		out.println ("  <Table ss:ExpandedColumnCount='40' ss:ExpandedRowCount='"+(dtimeList.size()+99)+"' x:FullColumns='1'");
+		out.println ("  <Table ss:ExpandedColumnCount='44' ss:ExpandedRowCount='"+(dtimeList.size()+99)+"' x:FullColumns='1'");
 		out.println ("   x:FullRows='1' ss:StyleID='s62' ss:DefaultColumnWidth='54'");
 		out.println ("   ss:DefaultRowHeight='16.5'>");
 		out.println ("   <Column ss:StyleID='s62' ss:Width='84'/>");
@@ -190,8 +190,12 @@ public class List4DtimeG extends BaseAction{
 		out.println ("      ss:Name='Print_Titles'/></Cell>");
 		out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>師資來源碼</Data><NamedCell");
 		out.println ("      ss:Name='Print_Titles'/></Cell>");
-		out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>全英語教學碼</Data><NamedCell");
-		out.println ("      ss:Name='Print_Titles'/></Cell>");
+		out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>全英語教學碼</Data><NamedCell ss:Name='Print_Titles'/></Cell>");
+		
+		out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>節次</Data><NamedCell ss:Name='Print_Titles'/></Cell>");
+		out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>教室</Data><NamedCell ss:Name='Print_Titles'/></Cell>");
+		out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>教學內涵</Data><NamedCell ss:Name='Print_Titles'/></Cell>");
+		out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>課號</Data><NamedCell ss:Name='Print_Titles'/></Cell>");
 		
 		out.println ("   </Row>");
 		
@@ -202,11 +206,11 @@ public class List4DtimeG extends BaseAction{
 		+ "(Dtime d LEFT OUTER JOIN empl e ON e.idno=d.techid)LEFT OUTER JOIN CodeEmpl ce ON e.pcode=ce.idno,CODE_DEPT cd,"
 		+ "CODE_DTIME_OPT cdo, Csno cs, Class c WHERE cd.id=c.DeptNo AND c.ClassNo=d.depart_class AND cs.cscode=d.cscode AND "
 		+ "d.opt=cdo.id AND d.Oid IN(");*/
-		StringBuilder sb=new StringBuilder("SELECT IFNULL(d.Introduction,'')as Introduction, IFNULL(d.Syllabi,'')as Syllabi, IFNULL(d.Syllabi_sub,'')as Syllabi_sub,cd.ename, d.Oid, d.elearning, cs.eng_name, c.Grade, c.DeptNo, cd.name as DeptName,c.CampusNo, c.SchoolNo, "
+		StringBuilder sb=new StringBuilder("SELECT pc.id, IFNULL(d.Introduction,'')as Introduction, IFNULL(d.Syllabi,'')as Syllabi, IFNULL(d.Syllabi_sub,'')as Syllabi_sub,cd.ename, d.Oid, d.elearning, cs.eng_name, c.Grade, c.DeptNo, cd.name as DeptName,c.CampusNo, c.SchoolNo, "
 		+ "c.ClassNo, c.ShortName, c.graduate, d.thour, d.credit,ce.idno as pid, ce.name as pname, e.unit as idno2, IFNULL(e.sname,'')as sname, e.cname, IFNULL(e.category,'') as cat1, cs.chi_name, "
 		+ "d.cscode, d.techid as techid, d.opt, cdo.name as opt2, d.thour, d.credit, (SELECT COUNT(*)FROM Seld WHERE Dtime_oid=d.Oid)as cnt FROM "
 		+ "(Dtime d LEFT OUTER JOIN empl e ON e.idno=d.techid)LEFT OUTER JOIN CodeEmpl ce ON e.pcode=ce.idno,CODE_DEPT cd,"
-		+ "CODE_DTIME_OPT cdo, Csno cs, Class c WHERE cd.id=c.DeptNo AND c.ClassNo=d.depart_class AND cs.cscode=d.cscode AND "
+		+ "CODE_DTIME_OPT cdo, Csno cs, Class c LEFT OUTER JOIN CODE_PE9 pc ON pc.id1=c.DeptNo WHERE cd.id=c.DeptNo AND c.ClassNo=d.depart_class AND cs.cscode=d.cscode AND "
 		+ "d.opt=cdo.id AND d.Oid IN(");
 		for(int i=0; i<dtimeList.size(); i++){
 			sb.append("'"+dtimeList.get(i).get("Oid")+"',");
@@ -217,21 +221,23 @@ public class List4DtimeG extends BaseAction{
 		//System.out.println(sb);
 		String tmpPcode111, tmpPcode112,departClass,tmpDepartClass;
 		dtimeList=df.sqlGet(sb.toString());
-		List<Map>pecode9=df.sqlGet("SELECT * FROM CODE_PE9");
-		List<Map>pecode11=df.sqlGet("SELECT * FROM CODE_PE11");
+		//List<Map>pecode9=df.sqlGet("SELECT * FROM CODE_PE9");
+		//List<Map>pecode11=df.sqlGet("SELECT * FROM CODE_PE11");
 		
-		String allYear,cscode, schoolName,schoolType;
+		//String allYear,cscode, schoolName,schoolType;
+		String schoolName,schoolType;
 		boolean practical = false;
 		List<Map>csGroup;
 		
 		List<Map>dtimeTeacher;
-		String language, language1, depType, emplType, pName;
+		//String language, language1, depType, emplType, pName;
+		String language, language1;
 		for (int i = 0; i < dtimeList.size(); i++) {	
 			
-			/*if(dtimeList.get(i).get("Syllabi_sub").toString().length()>4000){
-				System.out.println(dtimeList.get(i).get("Oid"));
+			
+			//System.out.println(dtimeList.get(i));
 				
-			}*/
+			
 		//for (int i = 0; i < 725; i++) {
 			//System.out.println(dtimeList.get(i));
 			//排除代碼
@@ -287,6 +293,9 @@ public class List4DtimeG extends BaseAction{
 				schoolType = "1002";
 				schoolName = "1";
 			}			
+			
+			
+			
 			out.println ("   <Row ss:AutoFitHeight='0' ss:Height='19.5'>");
 			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'></Data></Cell>");//
 			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'></Data></Cell>");//
@@ -308,12 +317,12 @@ public class List4DtimeG extends BaseAction{
 				if(dtimeList.get(i).get("cname")!=null){
 					out.print("1,"+sb);
 				}else{
-					out.print(sb);
+					out.print(sb.toString().trim());
 				}
 			}else{
 				out.print ("1");
 			}			
-			out.println ("    </Data></Cell>");
+			out.println ("</Data></Cell>");
 			//聘書職級碼							
 			if(dtimeTeacher.size()>0){
 				sb=new StringBuilder();
@@ -372,14 +381,18 @@ public class List4DtimeG extends BaseAction{
 				getCategory(String.valueOf(dtimeList.get(i).get("pid")))+"</Data></Cell>");
 			}				
 			//科系屬性碼
-			depType=getDept(dtimeList.get(i).get("ClassNo").toString());
-			if ((dtimeList.get(i)).get("chi_name").toString().indexOf("體育") >= 0 || dtimeList.get(i).get("chi_name").toString().indexOf("軍訓") >= 0) {
+			
+			//depType=getDept(dtimeList.get(i).get("ClassNo").toString());
+			
+			
+			/*if ((dtimeList.get(i)).get("chi_name").toString().indexOf("體育") >= 0 || dtimeList.get(i).get("chi_name").toString().indexOf("軍訓") >= 0) {
 				depType = "9901";
 			}
 			if ((dtimeList.get(i)).get("opt").toString().equals("3")) {
 				depType = "9902";
-			}			
-			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+depType+"</Data></Cell>");
+			}*/
+			
+			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+dtimeList.get(i).get("id")+"</Data></Cell>");
 			
 			//專兼任
 			/*if(dtimeTeacher.size()>0){
@@ -479,10 +492,6 @@ public class List4DtimeG extends BaseAction{
 				out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+replaceXMLSymbol(dtimeList.get(i).get("Syllabi").toString().trim()+dtimeList.get(i).get("Syllabi_sub").toString().trim())+"</Data></Cell>");
 			}
 			
-			
-			
-			
-			
 			out.println ("    <Cell ss:StyleID='s63' ss:HRef='http://ap.cust.edu.tw/CIS/Print/teacher/IntorDoc.do?Oid="+dtimeList.get(i).get("Oid")+"'><Data ss:Type='String'>http://ap.cust.edu.tw/CIS/Print/teacher/IntorDoc.do?Oid="+dtimeList.get(i).get("Oid")+"</Data></Cell>");
 			
 			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'></Data></Cell>");//備註
@@ -491,6 +500,12 @@ public class List4DtimeG extends BaseAction{
 			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+df.sqlGetStr("SELECT COUNT(*)FROM Seld s, Dtime d, stmd st WHERE "
 			+ "s.Dtime_oid=d.Oid AND s.student_no=st.student_no AND st.sex='1' AND d.Oid='"
 			+ dtimeList.get(i).get("Oid") + "'")+"</Data></Cell>");//男
+			
+			
+			System.out.println("SELECT COUNT(*)FROM Seld s, Dtime d, stmd st WHERE "
+					+ "s.Dtime_oid=d.Oid AND s.student_no=st.student_no AND st.sex='2' AND d.Oid='"
+					+ dtimeList.get(i).get("Oid") + "'");
+			
 			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+df.sqlGetStr("SELECT COUNT(*)FROM Seld s, Dtime d, stmd st WHERE "
 			+ "s.Dtime_oid=d.Oid AND s.student_no=st.student_no AND st.sex='2' AND d.Oid='"
 			+ dtimeList.get(i).get("Oid") + "'")+"</Data></Cell>");//女			
@@ -552,6 +567,38 @@ public class List4DtimeG extends BaseAction{
 			
 			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>0</Data></Cell>");//全英語教學碼
 			
+			
+			cls=df.sqlGet("SELECT * FROM Dtime_class d WHERE d.Dtime_oid="+dtimeList.get(i).get("Oid"));
+			
+			
+			
+			try {
+				out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+getFucxCls(cls)+"</Data></Cell>");//節次
+			}catch(Exception e) {
+				out.println ("    <Cell ss:StyleID='s63'></Cell>");
+			}
+			
+			
+			try {				
+				out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+getFucxRoom(cls)+"</Data></Cell>");//地點
+			}catch(Exception e) {
+				out.println ("    <Cell ss:StyleID='s63'></Cell>");
+			}
+			
+			try {
+				if(practical) {
+					out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>4</Data></Cell>");//含意
+				}else {
+					out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+getFucxMean(dtimeList.get(i).get("chi_name").toString()) +"</Data></Cell>");
+					
+				}
+			}catch(Exception e) {
+				out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>4</Data></Cell>");
+			}
+			
+			
+			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+dtimeList.get(i).get("cscode")+"</Data></Cell>");//全英語教學碼
+			
 			out.println ("   </Row>");
 			
 			
@@ -608,12 +655,75 @@ public class List4DtimeG extends BaseAction{
 		
 	}
 	
+	private String getFucxMean(String n) {
+		
+		if(n.indexOf("個案")>0||n.indexOf("實例")>0||n.indexOf("案例")>0||n.indexOf("專題")>0) {
+			return "2";
+		}
+		
+		if(n.indexOf("實務")>0||n.indexOf("模擬")>0||n.indexOf("服務學習")>0||n.indexOf("實習")>0) {
+			return "3";
+		}
+		
+		return "1";
+	}
+	
+	private String getFucxRoom(List<Map>cls) {
+		StringBuilder r=new StringBuilder();
+		for(int i=0; i<cls.size(); i++) {
+			r.append(cls.get(i).get("place")+",");
+			
+		}
+		r.delete(r.length()-1, r.length());
+		return r.toString();
+	}
+	
+	private String getFucxCls(List<Map>cls) {
+		StringBuilder clsinfo=new StringBuilder();
+		if(cls.size()==1) {
+			
+			if(!cls.get(0).get("begin").equals(cls.get(0).get("end"))) {				
+				clsinfo.append(     fucit(Integer.parseInt(cls.get(0).get("begin").toString()), Integer.parseInt(cls.get(0).get("end").toString()))         );
+			}else {
+				clsinfo.append(cls.get(0).get("begin")+",");
+			}
+			
+		}else {
+			
+			for(int j=0; j<cls.size(); j++) {
+				if(!cls.get(j).get("begin").equals(cls.get(j).get("end"))) {
+					clsinfo.append(this.bl.getWeekOfDay4Zh(Integer.parseInt(cls.get(j).get("week").toString()), "星期")+"-"+fucit(Integer.parseInt(cls.get(j).get("begin").toString()), Integer.parseInt(cls.get(j).get("end").toString()))+"、");
+				}else {
+					clsinfo.append(this.bl.getWeekOfDay4Zh(Integer.parseInt(cls.get(j).get("week").toString()), "星期")+"-"+cls.get(j).get("begin")+"、");
+				}
+			}
+			if(clsinfo.length()>0)
+			clsinfo.delete(clsinfo.length()-1, clsinfo.length());
+		}
+		
+		
+		
+		return clsinfo.toString();
+	}
+	
+	private String fucit(int begin, int end) {
+		
+		StringBuilder fucit=new StringBuilder();
+		for(int i=begin; i<=end; i++) {
+			fucit.append(i+",");
+		}
+		fucit.delete(fucit.length()-1, fucit.length());
+		return fucit.toString();
+	}
+	
+	
 	/*private String getDept(String departClass){		
 
 		if (StringUtils.isBlank(departClass))return "";
 		String deptCode;
 		if(departClass.length()==6){
 			deptCode = StringUtils.substring(departClass, 3, 4);
+			for(int i=0; i)
 			switch (deptCode.charAt(0)) {
 			case '0':
 				return "999901";
@@ -668,6 +778,8 @@ public class List4DtimeG extends BaseAction{
 			default:
 				return "";
 			}
+			
+			
 		}else{
 			deptCode = StringUtils.substring(departClass, 3, 5);
 			if(deptCode.equals("KA")){
@@ -677,12 +789,15 @@ public class List4DtimeG extends BaseAction{
 		}
 		
 	}*/
-	private String getDept(String departClass){		
+	
+	/*private String getDept(String departClass){		
 
 		if (StringUtils.isBlank(departClass))return "";
 		String deptCode;
 		if(departClass.length()==6){
 			deptCode = StringUtils.substring(departClass, 3, 4);
+			
+			
 			switch (deptCode.charAt(0)) {
 			case '0':
 				return "9902";
@@ -737,6 +852,9 @@ public class List4DtimeG extends BaseAction{
 			default:
 				return "";
 			}
+			
+			return "";
+			
 		}else{
 			deptCode = StringUtils.substring(departClass, 3, 5);
 			if(deptCode.equals("KA")){
@@ -745,7 +863,7 @@ public class List4DtimeG extends BaseAction{
 			return"";
 		}
 		
-	}
+	}*/
 	/**
 	 * 教師分類碼
 	 * @param departClass

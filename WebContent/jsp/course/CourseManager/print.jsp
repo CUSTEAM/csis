@@ -34,6 +34,7 @@
 		<!--li><button class="btn btn-link" onClick="$('#pnt').val('List4Seld52')" name="method:print" type="submit">表5-1</button></li-->
 		<li><button class="btn btn-link" onClick="$('#pnt').val('List4DtimeG')" name="method:print" type="submit">技職</button></li>
 		<li><button class="btn btn-link" onClick="$('#pnt').val('List4Course35')" name="method:print" type="submit">表3-5</button></li>
+		<li><button class="btn btn-link" onClick="$('#pnt').val('List4211')" name="method:print" type="submit">表4-2-11</button></li>
   	</ul>
 </div>
 

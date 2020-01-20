@@ -9,7 +9,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import action.BaseAction;
+import action.BasePrintXmlAction;
 
 /**
  * 班級、教室、教師、學生等公用課表
@@ -17,7 +17,7 @@ import action.BaseAction;
  * @author shawn
  *
  */
-public class TimeTable extends BaseAction{
+public class TimeTable extends BasePrintXmlAction{
 	
 	/**
 	 * TODO 
@@ -67,8 +67,8 @@ public class TimeTable extends BaseAction{
 		String title="";
 		
 		Date date=new Date();
-		response.setContentType("application/vnd.ms-excel; charset=UTF-8");
-		response.setHeader("Content-disposition","attachment;filename="+date.getTime()+".xls");		
+		xml2ods(response, getRequest(), date);
+				
 		PrintWriter out=response.getWriter();
 		//class
 		if(dtimeList!=null){

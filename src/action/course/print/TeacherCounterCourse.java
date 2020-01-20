@@ -10,14 +10,14 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import action.BaseAction;
+import action.BasePrintXmlAction;
 
 /**
  * 教師任教時數
  * @author John
  *
  */
-public class TeacherCounterCourse extends BaseAction{
+public class TeacherCounterCourse extends BasePrintXmlAction{
 	
 	public void print(HttpServletResponse response, List<Map>dtimeList, String Sterm) throws IOException{
 		StringBuilder sb=new StringBuilder("SELECT d.Oid, c.chi_name, d.credit, d.thour, cl.ClassName, e.cname FROM Dtime d, Csno c, Class cl, empl e " +
@@ -50,8 +50,8 @@ public class TeacherCounterCourse extends BaseAction{
 			list.add(map);
 		}
 		Date date=new Date();
-		response.setContentType("application/vnd.ms-excel; charset=UTF-8");
-		response.setHeader("Content-disposition","attachment;filename="+date.getTime()+".xls");				
+		xml2ods(response, getRequest(), date);
+						
 		PrintWriter out=response.getWriter();		
 		out.println("<html>");
 		out.println("<head><style>body{background-color:#cccccc;}td{font-size:18px;color:#333333;font-family:新細明體}</style>");

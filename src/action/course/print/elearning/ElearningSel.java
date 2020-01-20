@@ -9,14 +9,13 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import action.BaseAction;
+import action.BasePrintXmlAction;
 
-public class ElearningSel extends BaseAction{
+public class ElearningSel extends BasePrintXmlAction{
 	
 	public void print(HttpServletResponse response, List<Map>dtimeList, String schoolYear, String schoolTerm) throws IOException{
 		Date date=new Date();
-		response.setContentType("application/vnd.ms-excel; charset=UTF-8");
-		response.setHeader("Content-disposition","attachment;filename="+date.getTime()+".xls");		
+		xml2ods(response, getRequest(), date);
 		PrintWriter out = response.getWriter();
 		out.println("<html>");
 		out.println("<head><style>body{background-color:#cccccc;}td{font-size:18px;color:#333333;font-family:新細明體}</style>");

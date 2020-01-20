@@ -8,20 +8,20 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import action.BaseAction;
-import action.course.CourseManagerBase;
+import action.BasePrintXmlAction;
 
 /**
  * 課程通用報表
  * @author John
  *
  */
-public class ListDtime extends BaseAction{
+public class ListDtime extends BasePrintXmlAction{
 	
-	public void print(HttpServletResponse response, List<Map>DtimeList) throws IOException{		
+	public void print(HttpServletResponse response, List<Map>DtimeList) throws IOException{	
 		Date date=new Date();
-		response.setContentType("application/vnd.ms-excel; charset=UTF-8");
-		response.setHeader("Content-disposition","attachment;filename="+date.getTime()+".xls");				
+		
+		xml2ods(response, getRequest(), date);
+		
 		PrintWriter out=response.getWriter();
 		
 		if(DtimeList.size()<1){

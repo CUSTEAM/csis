@@ -164,7 +164,7 @@ public class AddSeldBase extends BaseAction{
 			savMessage(msg);
 			return SUCCESS;
 		}		
-		StringBuilder err=check();
+		StringBuilder err=check(stdNo, dvalue, term, true);
 		
 		if(err.length()>0){
 			err.append("<br><button class='btn btn-danger' onClick='$(\"#compel\").trigger(\"click\");'>強制加選</button>");
@@ -186,30 +186,36 @@ public class AddSeldBase extends BaseAction{
 		return searchStd();
 	}
 	
-	private StringBuilder check(){
+	protected StringBuilder check(String stdNo, String dvalue, String Sterm, boolean checkLimit){
 		StringBuilder err=new StringBuilder();
 		Map dtime=df.sqlGetMap("SELECT d.Select_Limit, cs.cscode, cs.chi_name FROM Dtime d, Csno cs WHERE d.cscode=cs.cscode AND d.Oid="+dvalue);
-			
+		Map emp;
 		//重複chi_name選課
 		if(df.sqlGetInt("SELECT COUNT(*) FROM ScoreHist s, Csno c WHERE " +
 		"s.cscode=c.cscode AND c.chi_name='"+dtime.get("chi_name")+"' AND s.student_no='"+stdNo+"' AND " +
-		"(s.score>=60 || s.score IS NULL)")>0){		
-			err.append("課程已修得<br>");
-		}		
+		"(s.score>=60 || s.score IS NULL)")>0){
+			emp=df.sqlGetMap("SELECT s.school_year, s.school_term, s.cscode, c.chi_name, s.score FROM ScoreHist s, Csno c WHERE " +
+			"s.cscode=c.cscode AND c.chi_name='"+dtime.get("chi_name")+"' AND s.student_no='"+stdNo+"' AND " +
+			"(s.score>=60 || s.score IS NULL)");
+			err.append(stdNo+"在"+emp.get("school_year")+"-"+emp.get("school_term")+"學期("+emp.get("cscode")+")"+emp.get("chi_name")+":"+emp.get("score")+"<br>");
+		}
 		
-		//重複cscode選課
-		if(df.sqlGetInt("SELECT COUNT(*) FROM ScoreHist s, Dtime d WHERE d.cscode=s.cscode AND " +
-		"d.Oid="+dvalue+" AND s.student_no='"+stdNo+"' AND (s.score>=60 || s.score IS NULL)")>0||		
-		
+		//本學期
+		if(				
+		//df.sqlGetInt("SELECT COUNT(*) FROM ScoreHist s, Dtime d WHERE d.cscode=s.cscode AND " +
+		//"d.Oid="+dvalue+" AND s.student_no='"+stdNo+"' AND (s.score>=60 || s.score IS NULL)")>0||					
 		df.sqlGetInt("SELECT COUNT(*)FROM Seld s, Dtime d WHERE s.Dtime_oid=d.Oid AND " +
-		"d.cscode='"+dtime.get("cscode")+"' AND s.student_no='"+stdNo+"' AND d.Sterm='"+term+"'")>0){
-			err.append("課程已修得或本學期重複修課<br>");
+		"d.cscode='"+dtime.get("cscode")+"' AND s.student_no='"+stdNo+"' AND d.Sterm='"+term+"'")>0){			
+			
+			emp=df.sqlGetMap("SELECT d.Oid, d.depart_class FROM Seld s, Dtime d WHERE s.Dtime_oid=d.Oid AND " +
+			"d.cscode='"+dtime.get("cscode")+"' AND s.student_no='"+stdNo+"' AND d.Sterm='"+term+"'");
+			err.append(stdNo+"本學期重複修課"+emp.get("depart_class")+":"+emp.get("Oid")+"<br>");
 		}		
 		
 		//超過選課上限 TODO 操他媽是多少？
 		if(df.sqlGetInt("SELECT SUM(d.credit) FROM Dtime d, Seld s WHERE " +
 		"d.Sterm='"+term+"' AND d.Oid=s.Dtime_oid AND s.student_no='"+stdNo+"'")>22){	
-			err.append("超過規定選課上限<br>");			
+			err.append(stdNo+"超過規定選課上限<br>");			
 		}
 		
 		//衝堂		
@@ -223,24 +229,25 @@ public class AddSeldBase extends BaseAction{
 						thisTime.get(i).get("end").toString(), String.valueOf(term));				
 				if(tmp!=null){					
 					for(int j=0; j<tmp.size(); j++){
-						err.append("上課時間重複: 星期"+tmp.get(j).get("week")+"第"+tmp.get(j).get("begin")
+						err.append(stdNo+"上課時間重複: 星期"+tmp.get(j).get("week")+"第"+tmp.get(j).get("begin")
 								+"至"+tmp.get(j).get("end")+"節, "+tmp.get(j).get("ClassName")+", "+tmp.get(j).get("chi_name"));
 					}
 				}
 			}catch(Exception e){
 				e.printStackTrace();
-				err.append("課程設定有問題無法偵測衝堂<br>");
+				err.append(stdNo+"課程設定有問題無法偵測衝堂<br>");
 			}
 		}
 		
 		//上限
+		if(checkLimit)
 		try{
 			int selected=df.sqlGetInt("SELeCT COUNT(*) FROM Seld WHERE Dtime_oid="+dvalue);
 			if((selected+1)>Integer.parseInt(dtime.get("Select_Limit").toString())){
-				err.append("超過人數上限(已選"+selected+")<br>");
+				err.append(stdNo+"超過人數上限(已選"+selected+")<br>");
 			}			
 		}catch(Exception e){
-			err.append("課程上限設定有問題<br>");
+			err.append(stdNo+"課程上限設定有問題<br>");
 		}
 		
 		return err;

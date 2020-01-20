@@ -31,7 +31,9 @@
 			<result>/jsp/seld/MergeSeld.jsp</result>
 		</action>
 		
-		
+		<action name="AddSeldBatch" class="action.seld.AddSeldBatch">
+			<result>/jsp/seld/AddSeldBatch.jsp</result>
+		</action>
 		
 	</package>
 	
@@ -56,6 +58,10 @@
 		
 		<action name="ReSetDtime" class="action.course.ReSetDtime">
 			<result>/jsp/course/ReSetDtime.jsp</result>
+		</action>
+		
+		<action name="RandomCsManager" class="action.course.RandomCsManagerAction">
+			<result>/jsp/course/RandomCsManager.jsp</result>
 		</action>
 		
 	</package>

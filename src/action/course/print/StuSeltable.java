@@ -1,25 +1,14 @@
 package action.course.print;
 
-import java.awt.Color;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
-
-
-
-
-import action.BaseAction;
+import action.BasePrintXmlAction;
 
 /**
  * 通識課表
@@ -27,13 +16,13 @@ import action.BaseAction;
  * @author John
  *
  */
-public class StuSeltable extends BaseAction{
+public class StuSeltable extends BasePrintXmlAction{
 	
 	public void print(HttpServletResponse response, List<Map>dtimeList, String year,String thisTerm, String term) throws IOException{
 		
 		Date date=new Date();
-		response.setContentType("application/vnd.ms-excel; charset=UTF-8");
-		response.setHeader("Content-disposition","attachment;filename="+date.getTime()+".xls");				
+		xml2ods(response, getRequest(), date);
+						
 		PrintWriter out=response.getWriter();
 		
 		//System.out.println(dtimeList);

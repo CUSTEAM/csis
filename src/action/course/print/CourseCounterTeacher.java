@@ -2,28 +2,25 @@ package action.course.print;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import action.BaseAction;
+import action.BasePrintXmlAction;
 
 /**
  * 教師任教時數
  * @author John
  *
  */
-public class CourseCounterTeacher extends BaseAction{
+public class CourseCounterTeacher extends BasePrintXmlAction{
 	
 	public void print(HttpServletResponse response, List<Map>dtimeList, String Sterm) throws IOException{
 		
 		Date date=new Date();
-		response.setContentType("application/vnd.ms-excel; charset=UTF-8");
-		response.setHeader("Content-disposition","attachment;filename="+date.getTime()+".xls");				
+		xml2ods(response, getRequest(), date);
 		PrintWriter out=response.getWriter();
 		
 		StringBuffer strbuf=new StringBuffer("SELECT d.techid, e.cname FROM Dtime d, empl e WHERE " +

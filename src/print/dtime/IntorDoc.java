@@ -29,8 +29,8 @@ public class IntorDoc extends SylParser{
 		Date date=new Date();
 		PrintWriter out=response.getWriter();
 		if(dtimes.size()>0){			
-			response.setContentType("application/vnd.ms-excel; charset=UTF-8");
-			response.setHeader("Content-disposition","attachment;filename="+date.getTime()+".xls");
+			xml2ods(response, getRequest(), date);
+			
 			StringBuilder sb;
 			if(savedtime){
 				sb=new StringBuilder("SELECT d.school_year, d.school_term, d.Oid, d.school_term, d.introduction, c.ClassName, cs.chi_name, cs.eng_name, e.cname " +

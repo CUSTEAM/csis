@@ -9,20 +9,20 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import action.BaseAction;
+import action.BasePrintXmlAction;
 
 /**
  * 教學評量
  * @author John
  *
  */
-public class CsCoansw extends BaseAction{
+public class CsCoansw extends BasePrintXmlAction{
 	
-	public void print(HttpServletResponse response, List<Map>list, String year, String term) throws IOException{		
+	public void print(HttpServletResponse response, List<Map>area, String year, String term) throws IOException{		
 		Date date=new Date();
 		SimpleDateFormat sf=new SimpleDateFormat("yyyy/MM/dd HH:mm");
-		response.setContentType("application/vnd.ms-excel; charset=UTF-8");
-		response.setHeader("Content-disposition","attachment;filename="+date.getTime()+".xls");			
+		xml2ods(response, getRequest(), date);
+		
 		PrintWriter out=response.getWriter();		
 		out.println ("<?xml version='1.0'?>");
 		out.println ("<?mso-application progid='Excel.Sheet'?>");
@@ -143,13 +143,13 @@ public class CsCoansw extends BaseAction{
 		+ "d.effsamples as cnt FROM Dtime d LEFT OUTER JOIN empl e ON e.idno=d.techid, Csno cs, Class c WHERE d.nonCoansw IS NULL AND "
 		+ "d.cscode=cs.cscode AND d.depart_class=c.ClassNo AND d.Oid IN(");
 						
-		for(int i=0; i<list.size(); i++){
-			sb.append(list.get(i).get("Oid")+",");
+		for(int i=0; i<area.size(); i++){
+			sb.append(area.get(i).get("Oid")+",");
 		}
 		sb.delete(sb.length()-1, sb.length());
 		sb.append(")AND d.samples>0 && d.coansw>0 ORDER BY d.techid");
 		
-		list=df.sqlGet(sb.toString());
+		List<Map>list=df.sqlGet(sb.toString());
 		
 		out.println (" <Worksheet ss:Name='課程列表 - 以50為基準'>");
 		out.println ("  <Names>");
@@ -193,7 +193,7 @@ public class CsCoansw extends BaseAction{
 			out.println ("    <Cell><Data ss:Type='String'>"+list.get(i).get("samples")+"</Data></Cell>");			
 			samples=Integer.parseInt(list.get(i).get("cnt").toString());
 			
-			System.out.println(Float.parseFloat( list.get(i).get("coansw").toString() )       /samples);
+			//System.out.println(Float.parseFloat( list.get(i).get("coansw").toString() )       /samples);
 			coansw=50+(  Float.parseFloat( list.get(i).get("coansw").toString() )       /samples)*10;
 			
 			/*if(Float.parseFloat( list.get(i).get("coansw").toString() )/samples<2){
@@ -449,18 +449,18 @@ public class CsCoansw extends BaseAction{
 		out.println ("  </ConditionalFormatting>");
 		out.println (" </Worksheet>");
 		//
-		
+		//System.out.println(area.size());
 		sb=new StringBuilder("SELECT d.Oid, e.cname, st.student_no, st.student_name, c.ClassName, cs.chi_name, s.coansw, IFNULL(s.coansw_invalid,'')as coansw_invalid "
 				+ "FROM Dtime d, empl e, Seld s, Csno cs, stmd st, Class c WHERE d.techid=e.idno AND "
 				+ "s.coansw IS NOT NULL AND d.Oid=s.Dtime_oid AND s.student_no=st.student_no AND "
 				+ "c.ClassNo=d.depart_class AND cs.cscode=d.cscode AND d.Oid IN(");
-		for(int i=0; i<list.size(); i++){
-			System.out.println(list.get(i));
-			sb.append(list.get(i).get("Oid")+",");
+		for(int i=0; i<area.size(); i++){
+			//System.out.println(area.get(i));
+			sb.append(area.get(i).get("Oid")+",");
 		}		
 		sb.delete(sb.length()-1, sb.length());
 		sb.append(")ORDER BY d.Oid, st.student_no");
-		System.out.println(sb);
+		//System.out.println(sb);
 		list=df.sqlGet(sb.toString());
 		
 		List<Map>ques=df.sqlGet("SELECT question, IFNULL(debug, '')as debug FROM Question WHERE topic='1'");

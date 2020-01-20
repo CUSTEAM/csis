@@ -7,22 +7,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import action.BaseAction;
+import action.BasePrintXmlAction;
 
-public class List4Dtime32 extends BaseAction{
+public class List4Dtime32 extends BasePrintXmlAction{
 	
 	public void print(HttpServletResponse response, List<Map>dtimeList, String year, String term) throws IOException{
 		
 		Date date=new Date();
-		response.setContentType("application/vnd.ms-excel; charset=UTF-8");
-		response.setHeader("Content-disposition","attachment;filename="+date.getTime()+".xls");				
+		xml2ods(response, getRequest(), date);	
 		PrintWriter out=response.getWriter();
-		
-		
 		
 		out.println("<html>");
 		out.println("<head><style>body{background-color:#cccccc;}td{font-size:18px;color:#333333;font-family:新細明體}</style>");

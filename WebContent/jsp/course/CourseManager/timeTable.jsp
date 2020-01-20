@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+
 <div id="timeTable" style="padding:0px;">
+
 <table class="table">	
 	<c:forEach items="${dc}" var="d">
 	<tr>
@@ -27,7 +30,21 @@
 		
 		<input type="text" name="place" class="place form-control" autocomplete="off" 
 		value="<c:if test="${d.place!=null&& d.place ne''}">${d.place}, ${d.name2}</c:if>" 
-		onClick="this.value='';" data-provide="typeahead"/>				
+		onClick="this.value='';" data-provide="typeahead"/>	
+		
+		
+		<c:if test="${cs.Sterm eq '3'}">
+		<div class="input-group">
+            <span class="input-group-addon">自</span>
+            <input class="form-control date" type="text" value="${d.begin_date}" placeholder="點一下輸入日期" name="beginDate"/>
+        </div>
+        
+        <div class="input-group">
+            <span class="input-group-addon">至</span>
+            <input class="form-control date" type="text" value="${d.end_date}" placeholder="點一下輸入日期" name="endDate"/>
+        </div>
+		</c:if>
+					
 		
 		</td>				
 	</tr>
@@ -63,12 +80,41 @@
 			</c:forEach>
 		</select>		
 		<input type="text" name="place" class="place form-control" autocomplete="off" onClick="this.value='';" data-provide="typeahead"/>				
+		
+		
+		
+		<c:if test="${cs.Sterm eq '3'}">
+		<div class="input-group">
+            <span class="input-group-addon">自</span>
+            <input class="form-control date" type="text" placeholder="點一下輸入日期" name="beginDate"/>
+        </div>
+        
+        <div class="input-group">
+            <span class="input-group-addon">至</span>
+            <input class="form-control date" type="text" placeholder="點一下輸入日期" name="endDate"/>
+        </div>
+        </c:if>
+		
 		</td>				
 	</tr>
 	</c:forEach>
 </table>
 </div>
 <script>
+
+
+
+$(".date" ).datepicker({
+    changeMonth: true,
+    changeYear: true,
+    //minDate: '@minDate'
+    yearRange: "-1:+1"
+    //showButtonPanel: true,
+    //dateFormat: 'yy-MM-dd'
+});
+
+
+
 function checkTime(){
 	week=$('select[name="week"]');
 	begin=$('select[name="begin"]');

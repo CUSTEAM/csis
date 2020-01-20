@@ -7,6 +7,7 @@
 		<select disabled class="selectpicker" data-width="auto">
 			<option <c:if test="${cs.Sterm eq'1'}">selected</c:if> value="1">上學期</option>
 			<option <c:if test="${cs.Sterm eq'2'}">selected</c:if> value="2">下學期</option>
+			<option <c:if test="${cs.Sterm eq'3'}">selected</c:if> value="3">不分學期</option>
 		</select>
 		<%@ include file="/inc/jsp-kit/classSelector.jsp"%>
 		<c:choose>

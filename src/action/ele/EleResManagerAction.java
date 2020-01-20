@@ -7,10 +7,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import action.BasePrintXmlAction;
 import model.Message;
-import action.BaseAction;
 
-public class EleResManagerAction extends BaseAction{
+public class EleResManagerAction extends BasePrintXmlAction{
 	
 	public String year, term, dept, check, Oid[], thour_real[], checked[];
 	
@@ -97,8 +97,8 @@ public class EleResManagerAction extends BaseAction{
 	public String print() throws IOException{
 		
 		Date date=new Date();
-		response.setContentType("application/vnd.ms-excel; charset=UTF-8");
-		response.setHeader("Content-disposition","attachment;filename="+date.getTime()+".xls");		
+		xml2ods(response, getRequest(), date);
+				
 		PrintWriter out=response.getWriter();
 		out.println ("<?xml version='1.0'?>");
 		out.println ("<?mso-application progid='Excel.Sheet'?>");

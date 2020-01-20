@@ -8,21 +8,21 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import action.BaseAction;
+import action.BasePrintXmlAction;
 
 /**
  * 教師任教時數
  * @author John
  *
  */
-public class TeacherCounterTime extends BaseAction{
+public class TeacherCounterTime extends BasePrintXmlAction{
 	
 	public void print(HttpServletResponse response, List<Map>list) throws IOException{
 		
 		Date date=new Date();
 		//response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=UTF-8");
-		response.setContentType("application/vnd.ms-excel; charset=UTF-8");
-		response.setHeader("Content-disposition","attachment;filename="+date.getTime()+".xls");			
+		xml2ods(response, getRequest(), date);
+					
 		
 		PrintWriter out=response.getWriter();
 		StringBuffer sb=new StringBuffer("SELECT sum(d.thour) total, e.cname FROM Dtime d LEFT OUTER JOIN empl e ON d.techid=e.idno WHERE d.Oid IN(");

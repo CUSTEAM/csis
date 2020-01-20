@@ -16,16 +16,17 @@
 		<select name="Sterm" id="Sterm" class="selectpicker" data-width="auto">
 			<option <c:if test="${Sterm eq'1'}">selected</c:if> value="1">上學期</option>
 			<option <c:if test="${Sterm eq'2'}">selected</c:if> value="2">下學期</option>
+			<option <c:if test="${Sterm eq'3'}">selected</c:if> value="3">不分學期</option>
 		</select>
 		<%@ include file="/inc/jsp-kit/classSelector.jsp"%></td>
 	</tr>
 	<tr>
 		<td nowrap>
 		
-		<div class="input-group">
-		  	<span class="input-group-addon">授課教師</span>
-		  	<input type="text" placeholder="教師完整姓名" class="form-control techid" name="techid" id="techid" value="${techid}" onClick="this.value='';" autocomplete="off" data-provide="typeahead"/>
-		</div>
+			<div class="input-group">
+			  	<span class="input-group-addon">授課教師</span>
+			  	<input type="text" placeholder="教師完整姓名" class="form-control techid" name="techid" id="techid" value="${techid}" onClick="this.value='';" autocomplete="off" data-provide="typeahead"/>
+			</div>
 		
 				
 			<div class="input-group">
@@ -51,6 +52,11 @@
 				<option <c:if test="${y_pro_eng eq'0'}">selected</c:if> value="0">否</option>				
 			</select>
         	</div>
+        	
+        	<div class="input-group">
+			  	<span class="input-group-addon">教室</span>
+			  	<input type="text" placeholder="教室代碼或名稱" class="form-control place" name="location" id="location" value="${location}" onClick="this.value='';" autocomplete="off" data-provide="typeahead"/>
+			</div>
 		</td>
 	</tr>
 	<tr>
@@ -120,7 +126,7 @@
 	</tr>
 </table>
 <div class="panel-body">
-	<button class="btn btn-default demo" name="method:add">新增課程</button>
+	<button class="btn btn-primary demo" name="method:add">新增課程</button>
 		    <%@ include file="/jsp/course/CourseManager/print.jsp"%>
 		    
 		    <div class="btn-group">
