@@ -71,5 +71,11 @@
 			<result>/jsp/elearning/EleResManager.jsp</result>
 		</action>
 	</package>
+	
+	<package name="license" extends="abstract_struts" namespace="/">		
+		<action name="LicenseCodeManager" class="action.license.LicenseCodeManagerAction">
+			<result>/jsp/license/LicenseCodeManager.jsp</result>
+		</action>
+	</package>
 
 </struts>

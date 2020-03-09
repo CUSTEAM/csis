@@ -36,6 +36,7 @@
             	<value>model/SysLogSecurity.hbm.xml</value>
             	<value>model/SeldBatch.hbm.xml</value>
             	<value>model/DtimeClass.hbm.xml</value>
+            	<value>model/LicenseCode.hbm.xml</value>
             </list>
         </property>
     </bean>
