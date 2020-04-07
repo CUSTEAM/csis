@@ -490,7 +490,7 @@ public class CourseManagerBase extends BaseAction{
         	
         	//List4Course35
         	case"List4211":List4211 List4211=new List4211();
-        	List4211.print(response, cno,sno,dno,gno,zno);
+        	List4211.print(response, cno,sno,dno,gno,zno,getContext().getAttribute("school_year").toString(),getContext().getAttribute("school_term").toString());
         	break;
         
 	        default:Message msg=new Message();

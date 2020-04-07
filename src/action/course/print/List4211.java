@@ -12,7 +12,7 @@ import action.BasePrintXmlAction;
 
 public class List4211 extends BasePrintXmlAction{
 	
-	public void print(HttpServletResponse response, String cno, String sno, String dno, String gno, String zno) throws IOException{
+	public void print(HttpServletResponse response, String cno, String sno, String dno, String gno, String zno, String year, String term) throws IOException{
 		
 		Date date=new Date();
 		
@@ -103,7 +103,7 @@ public class List4211 extends BasePrintXmlAction{
 			stds=Integer.parseInt(String.valueOf(list.get(i).get("stds")));
 			ptds=Integer.parseInt(String.valueOf(list.get(i).get("ptds")));
 			out.println ("   <Row>");
-			out.println ("    <Cell><Data ss:Type='String'>108-1</Data></Cell>");
+			out.println ("    <Cell><Data ss:Type='String'>"+year+"-"+term+"</Data></Cell>");
 			out.println ("    <Cell><Data ss:Type='String'>"+list.get(i).get("inst_name")+"</Data></Cell>");
 			out.println ("    <Cell><Data ss:Type='String'>"+list.get(i).get("dept_name")+"</Data></Cell>");
 			out.println ("    <Cell><Data ss:Type='String'>"+list.get(i).get("school_name")+"</Data></Cell>");
