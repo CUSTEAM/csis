@@ -75,8 +75,6 @@ public class List4Course35 extends BasePrintXmlAction{
 				continue;
 			}
 			
-			
-			
 			char SchoolNo=dtime.get("SchoolNo").toString().charAt(dtime.get("SchoolNo").toString().length()-1);
 			String School_id;
 			//System.out.println(SchoolNo);
@@ -85,12 +83,6 @@ public class List4Course35 extends BasePrintXmlAction{
 			}else{
 				School_id="";
 			}
-			
-			
-			//System.out.println(dtime.get("dOid")+":"+dtime.get("cscode"));
-			
-			
-			
 
 			//一科目多教師
 			List<Map>dtimeTeacher=df.sqlGet("SELECT * FROM Dtime_teacher WHERE Dtime_oid='"+dtimeList.get(i).get("Oid")+"'");
@@ -210,32 +202,7 @@ public class List4Course35 extends BasePrintXmlAction{
 						out.println("</td>");
 
 						// 系所代碼
-						out.println("<td style='mso-number-format:\\@' nowrap>");
-						
-						/*SchoolNo=dtime.get("SchoolNo").toString().charAt(dtime.get("SchoolNo").toString().length()-1);
-						if(SchoolNo=='G'){
-							School_id="G";
-						}else{
-							School_id="";
-						}
-						
-						for (int k = 0; k < pecode9.size(); k++) {
-
-							if (pecode9.get(k).get("id1").toString().equals(dtime.get("DeptNo").toString())&&pecode9.get(k).get("id2").toString().equals(School_id)) {
-								out.println(pecode9.get(k).get("id"));
-							}
-						}
-						*/
-						
-
-						
-						
-						/*for (int k = 0; k < pecode9.size(); k++) {
-
-							if (pecode9.get(k).get("id1").toString().equals(dtime.get("DeptNo").toString())&&pecode9.get(k).get("id2").toString().equals(School_id)) {
-								out.println(pecode9.get(k).get("id"));
-							}					
-						}*/
+						out.println("<td style='mso-number-format:\\@' nowrap>");						
 						
 						out.println(dtime.get("p9Id"));
 						
@@ -261,7 +228,13 @@ public class List4Course35 extends BasePrintXmlAction{
 				}
 			
 				
-			}else{
+			}			
+			//else
+			if(!String.valueOf(dtimeList.get(i).get("techid")).equals(""))
+			{
+				
+				
+				
 				out.println("  <tr>");
 				out.println("<td >"+dtime.get("cscode")+"</td>");			
 				out.println("<td>w"+dtime.get("dOid")+"</td>");			
