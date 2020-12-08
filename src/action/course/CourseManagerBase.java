@@ -18,6 +18,7 @@ import action.course.print.ClassTimetable40;
 import action.course.print.CourseCounterTeacher;
 import action.course.print.CsCoansw;
 import action.course.print.ExamPacketFace;
+import action.course.print.List16;
 import action.course.print.List4211;
 import action.course.print.List4Course35;
 import action.course.print.List4Dtime13;
@@ -491,6 +492,11 @@ public class CourseManagerBase extends BaseAction{
         	//List4Course35
         	case"List4211":List4211 List4211=new List4211();
         	List4211.print(response, cno,sno,dno,gno,zno,getContext().getAttribute("school_year").toString(),getContext().getAttribute("school_term").toString());
+        	break;
+        	
+        	//List16
+        	case"List16":List16 List16=new List16();
+        	List16.print(response, getDtimeList(), (String)getContext().getAttribute("school_term"));
         	break;
         
 	        default:Message msg=new Message();
