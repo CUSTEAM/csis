@@ -63,7 +63,7 @@ public class List16 extends BasePrintXmlAction{
 		sql.append(")");
 		List<Map>cs=df.sqlGet(sql.toString());
 		for(int i=0; i<cs.size(); i++) {
-			System.out.println(cs.get(i));
+			//System.out.println(cs.get(i));
 			cs.get(i).put("cls", df.sqlGet("SELECT dc.place, dc.week, dc.begin, dc.end FROM Dtime_class dc WHERE dc.Dtime_oid="+cs.get(i).get("Oid")));
 			cs.get(i).put("stds", df.sqlGet("SELECT cs.name as SchoolName, st.student_name, st.student_no, c.Grade, "
 					+ "c.SeqNo, cd.name as deptName FROM Seld se, stmd st, Class c, CODE_DEPT cd, CODE_SCHOOL cs "
@@ -74,8 +74,10 @@ public class List16 extends BasePrintXmlAction{
 		}
 		List<Map>stds;
 		List<Map>cls;
-		StringBuilder sb;
-		StringBuilder sb1;
+		StringBuilder sb, sb1, sb2;
+		
+		int begin,end;
+		
 		for(int i=0; i<cs.size(); i++) {
 			
 			stds=(List<Map>) cs.get(i).get("stds");
@@ -83,9 +85,23 @@ public class List16 extends BasePrintXmlAction{
 			
 			sb=new StringBuilder();
 			sb1=new StringBuilder();
+			
+			
 			for(int j=0; j<cls.size(); j++) {
-				sb.append(  bl.getWeekOfDay(
-						Integer.parseInt(cls.get(j).get("week").toString()), "")+""+cls.get(j).get("begin")+","+cls.get(j).get("end")   );
+				try {
+					sb2=new StringBuilder();
+					begin=Integer.parseInt(cls.get(j).get("begin").toString());
+					end=Integer.parseInt(cls.get(j).get("end").toString());
+					for(int k=begin; k<=end; k++) {
+						sb2.append(k+",");
+					}
+					sb2.delete(sb2.length()-1, sb2.length());
+					sb.append(  bl.getWeekOfDay(
+							Integer.parseInt(cls.get(j).get("week").toString()), "")+""+sb2   );
+				}catch(Exception e) {
+					
+				}
+				
 			}
 			try {
 				for(int j=0; j<cls.size(); j++) {
