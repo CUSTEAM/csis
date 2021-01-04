@@ -86,7 +86,10 @@ public class List4211 extends BasePrintXmlAction{
 		StringBuilder sb=new StringBuilder("SELECT cc.name as inst_name, cs.name as school_name, "
 		+ "cd.name as dept_name, c.ClassNo,SUM((SELECT COUNT(*)FROM stmd WHERE depart_class=c.ClassNo))"
 		+ "as stds,SUM((SELECT COUNT(*)FROM stmd st, ScoreHist sh, Csno csn WHERE sh.cscode=csn.cscode AND "
-		+ "(csn.chi_name LIKE'%演算法%'OR csn.chi_name LIKE'%程式%'OR csn.chi_name LIKE'%計算機%'OR csn.chi_name LIKE'%軟體%'OR csn.chi_name LIKE'%邏輯%') AND sh.score>=60 AND st.student_no=sh.student_no AND "
+		//+ "(csn.chi_name LIKE'%程式%'OR csn.chi_name LIKE'%計算機%'OR csn.chi_name LIKE'%軟體%'OR csn.chi_name LIKE'%邏輯%') AND "
+		+ "(csn.chi_name LIKE'%計算機%'OR csn.chi_name LIKE'%程式%') AND "
+		//+"c.ClassName NOT LIKE '%產%'AND c.ClassName NOT LIKE '%軍%' AND "
+		+ "sh.score>=80 AND st.student_no=sh.student_no AND "
 		+ "st.depart_class=c.ClassNo))as ptds FROM Class c, CODE_SCHOOL cs, CODE_DEPT cd, CODE_COLLEGE cc "
 		+ "WHERE c.SchoolNo=cs.id AND cd.id=c.DeptNo AND cc.id=c.InstNo AND c.stds>0 ");
 		if(!cno.equals(""))sb.append("AND c.CampusNo='"+cno+"'");
