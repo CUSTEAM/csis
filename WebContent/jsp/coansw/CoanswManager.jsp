@@ -59,24 +59,24 @@ $(document).ready(function() {
 
 <table class="table control-group info">
 	<tr>
-		<td nowrap>日期</td>
-		<td nowrap>名稱</td>
+		<td width="20%" nowrap>日期</td>
+		<td width="20" nowrap>名稱</td>
 		
 		<td nowrap>修改日期</td>
-		<td width="100%">編輯者</td>
+		<td width="60%">編輯者</td>
 	</tr>
 	<c:forEach items="${cals}" var="c">
 	<tr>
-		<td>
+		<td >
 		
 		<input onClick="$('#name${c.name}').val('${c.name}')" 
-		class="dtpick" type="text" id="cdate${c.name}" placeholder="點一下輸入日期" 
+		class="dtpick form-control" type="text" id="cdate${c.name}" placeholder="點一下輸入日期" 
 		<c:if test="${param.sys ne c.sys && param.sys !=null}">readonly</c:if>
 		name="cdate" value="${c.date}"/>
 		</td>
 		<td nowrap>${c.note}</td>
 		<td nowrap>${c.edate}</td>
-		<td width="100%">${c.editor}
+		<td width="50%">${c.editor}
 		<input type="hidden" id="name${c.name}" name="name" value="${c.name}">
 		<input type="hidden" value="${c.sys}">
 		</td>
@@ -86,8 +86,8 @@ $(document).ready(function() {
 	<tr>
 		<td colspan="4">
 		<button class="btn btn-success" id="subInfo" name="method:update" onClick="javascript: return(confirm('請確認您輸入的資料後,按下確定')); void('')" type="submit">變更日期設定</button>
-		<!-- button class="btn" name="method:reset" type="submit">@</button>
-		<button class="btn" name="method:setInvalid" type="submit">%</button-->
+		
+		<!-- button class="btn" name="method:setInvalid" type="submit">%</button-->
 		</td>
 	</tr>
 </table>
@@ -102,12 +102,14 @@ $(document).ready(function() {
 	<c:forEach items="${topic }" var="t">
 	<tr>
 		<td nowrap width="400">${t.name}</td>
-		<td width="100"><button class="btn btn-danger" onClick="$('#Oid').val('${t.Oid}')" name="method:edit" type="submit">編輯</button></td>
+		<td width="100"><button disabled class="btn btn-danger" onClick="$('#Oid').val('${t.Oid}')" name="method:edit" type="submit">編輯</button></td>
 		<td>${t.note}</td>
 	</tr>
 	
 	</c:forEach> 
-
+	<tr>
+		<td colspan="3">
+<button class="btn" name="method:reset" type="submit">重新計算</button></td></tr>
 </table>
 <div style="height:800px;"></div> 
 </form>  

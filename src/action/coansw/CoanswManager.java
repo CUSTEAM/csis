@@ -97,8 +97,6 @@ public class CoanswManager extends BaseAction{
 	 * @return
 	 */
 	public String reset(){
-		
-		//初始作業
 		df.exSql("UPDATE Dtime SET effsamples=0, samples=0, coansw=0");
 		df.exSql("UPDATE Seld SET coansw_invalid=null");		
 		//尋找偵錯題與被偵錯題 TODO 動態定位
@@ -107,11 +105,10 @@ public class CoanswManager extends BaseAction{
 		int que, bug, abs;		
 		for(int i=0; i<c.size(); i++){
 			que=Integer.parseInt(c.get(i).get("que").toString());//計分被偵錯題
-			bug=Integer.parseInt(c.get(i).get("bug").toString());//不計分偵錯題			
-						
+			bug=Integer.parseInt(c.get(i).get("bug").toString());//不計分偵錯題
 			//排除
 			//if(c.get(i).get("ans").toString().equals("1111111111")){
-			if(c.get(i).get("ans").toString().equals("1111111111")||c.get(i).get("ans").toString().equals("2222222222")||c.get(i).get("ans").toString().equals("3333333333")||c.get(i).get("ans").toString().equals("4444444444")||c.get(i).get("ans").toString().equals("5555555555")){
+			if(c.get(i).get("ans").toString().equals("11111111111")||c.get(i).get("ans").toString().equals("22222222222")||c.get(i).get("ans").toString().equals("33333333333")||c.get(i).get("ans").toString().equals("44444444444")||c.get(i).get("ans").toString().equals("55555555555")){
 				//無效
 				df.exSql("UPDATE Dtime SET samples=samples+1 WHERE Oid="+c.get(i).get("Dtime_oid"));
 				df.exSql("UPDATE Seld SET coansw_invalid='*'WHERE Oid="+c.get(i).get("Oid"));
@@ -119,7 +116,7 @@ public class CoanswManager extends BaseAction{
 				continue;
 			}				
 			abs=Math.abs(que-bug);
-			if(abs>1){
+			if(abs>=1){
 				//有效
 				df.exSql("UPDATE Dtime SET samples=samples+1, effsamples=effsamples+1, coansw=coansw+"+sum(c.get(i).get("ans").toString())+" WHERE Oid="+c.get(i).get("Dtime_oid"));
 				c.get(i).put("check", true);
@@ -129,8 +126,7 @@ public class CoanswManager extends BaseAction{
 				df.exSql("UPDATE Seld SET coansw_invalid='*'WHERE Oid="+c.get(i).get("Oid"));
 				c.get(i).put("check", false);
 			}
-				
-		}		
+		}
 		return SUCCESS;
 	}
 	
