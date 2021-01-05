@@ -85,7 +85,7 @@ public class List4DtimeG extends BasePrintXmlAction{
 		out.println ("  <Names>");
 		out.println ("   <NamedRange ss:Name='Print_Titles' ss:RefersTo='=SHEET1!R1'/>");
 		out.println ("  </Names>");
-		out.println ("  <Table ss:ExpandedColumnCount='44' ss:ExpandedRowCount='"+(dtimeList.size()+99)+"' x:FullColumns='1'");
+		out.println ("  <Table ss:ExpandedColumnCount='45' ss:ExpandedRowCount='"+(dtimeList.size()+99)+"' x:FullColumns='1'");
 		out.println ("   x:FullRows='1' ss:StyleID='s62' ss:DefaultColumnWidth='54'");
 		out.println ("   ss:DefaultRowHeight='16.5'>");
 		out.println ("   <Column ss:StyleID='s62' ss:Width='84'/>");
@@ -196,7 +196,7 @@ public class List4DtimeG extends BasePrintXmlAction{
 		out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>教室</Data><NamedCell ss:Name='Print_Titles'/></Cell>");
 		out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>教學內涵</Data><NamedCell ss:Name='Print_Titles'/></Cell>");
 		out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>課號</Data><NamedCell ss:Name='Print_Titles'/></Cell>");
-		
+		out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>編號</Data><NamedCell ss:Name='Print_Titles'/></Cell>");
 		out.println ("   </Row>");
 		
 		
@@ -208,7 +208,7 @@ public class List4DtimeG extends BasePrintXmlAction{
 		+ "d.opt=cdo.id AND d.Oid IN(");*/
 		StringBuilder sb=new StringBuilder("SELECT pc.id, IFNULL(d.Introduction,'')as Introduction, IFNULL(d.Syllabi,'')as Syllabi, IFNULL(d.Syllabi_sub,'')as Syllabi_sub,cd.ename, d.Oid, d.elearning, cs.eng_name, c.Grade, c.DeptNo, cd.name as DeptName,c.CampusNo, c.SchoolNo, "
 		+ "c.ClassNo, c.ShortName, c.graduate, d.thour, d.credit,ce.idno as pid, ce.name as pname, e.unit as idno2, IFNULL(e.sname,'')as sname, e.cname, IFNULL(e.category,'') as cat1, cs.chi_name, "
-		+ "d.cscode, d.techid as techid, d.opt, cdo.name as opt2, d.thour, d.credit, (SELECT COUNT(*)FROM Seld WHERE Dtime_oid=d.Oid)as cnt FROM "
+		+ "d.Oid, d.cscode, d.techid as techid, d.opt, cdo.name as opt2, d.thour, d.credit, (SELECT COUNT(*)FROM Seld WHERE Dtime_oid=d.Oid)as cnt FROM "
 		+ "(Dtime d LEFT OUTER JOIN empl e ON e.idno=d.techid)LEFT OUTER JOIN CodeEmpl ce ON e.pcode=ce.idno,CODE_DEPT cd,"
 		+ "CODE_DTIME_OPT cdo, Csno cs, Class c LEFT OUTER JOIN CODE_PE9 pc ON pc.id1=c.DeptNo WHERE cd.id=c.DeptNo AND c.ClassNo=d.depart_class AND cs.cscode=d.cscode AND "
 		+ "d.opt=cdo.id AND d.Oid IN(");
@@ -598,6 +598,7 @@ public class List4DtimeG extends BasePrintXmlAction{
 			
 			
 			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+dtimeList.get(i).get("cscode")+"</Data></Cell>");//全英語教學碼
+			out.println ("    <Cell ss:StyleID='s63'><Data ss:Type='String'>"+dtimeList.get(i).get("Oid")+"</Data></Cell>");//編號
 			
 			out.println ("   </Row>");
 			
