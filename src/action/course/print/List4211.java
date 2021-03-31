@@ -18,8 +18,7 @@ public class List4211 extends BasePrintXmlAction{
 		
 		xml2ods(response, getRequest(), date);
 		
-		PrintWriter out=response.getWriter();
-		
+		PrintWriter out=response.getWriter();		
 		
 		out.println ("<?xml version='1.0'?>");
 		out.println ("<?mso-application progid='Excel.Sheet'?>");
@@ -65,7 +64,7 @@ public class List4211 extends BasePrintXmlAction{
 		out.println ("  </Style>");
 		out.println (" </Styles>");
 		out.println (" <Worksheet ss:Name='工作表1'>");
-		out.println ("  <Table ss:ExpandedColumnCount='6' ss:ExpandedRowCount='999' x:FullColumns='1'");
+		out.println ("  <Table ss:ExpandedColumnCount='7' ss:ExpandedRowCount='999' x:FullColumns='1'");
 		out.println ("   x:FullRows='1' ss:StyleID='s69' ss:DefaultColumnWidth='54'");
 		out.println ("   ss:DefaultRowHeight='15.75'>");
 		out.println ("   <Column ss:StyleID='s69' ss:Width='73.5'/>");
@@ -80,52 +79,54 @@ public class List4211 extends BasePrintXmlAction{
 		out.println ("    <Cell><Data ss:Type='String'>系所</Data></Cell>");
 		out.println ("    <Cell><Data ss:Type='String'>學制</Data></Cell>");
 		out.println ("    <Cell><Data ss:Type='String'>學生人數</Data></Cell>");
-		out.println ("    <Cell><Data ss:Type='String'>曾修程式設計人數</Data></Cell>");
+		out.println ("    <Cell><Data ss:Type='String'>程設男</Data></Cell>");
+		out.println ("    <Cell><Data ss:Type='String'>程設女</Data></Cell>");
 		out.println ("   </Row>");
+		//曾修程式設計人數由教務處高層依計劃執行嚴格控制人數，不可依系統數字呈現。2020/11/1教資
+		//曾修程式設計人數由包含「程式設計」4個字實際狀況嚴格執行，不可依計劃執行數字呈現。2020/4/1課務
+		/*StringBuilder sb=new StringBuilder("SELECT cc.name as inst_name, cs.name as school_name, "
+		+ "cd.name as dept_name, c.ClassNo,"
+		//+ "SUM((SELECT COUNT(*)FROM stmd WHERE depart_class=c.ClassNo))as stds,"
+		+ "SUM((SELECT COUNT(*)FROM stmd st, ScoreHist sh, Csno csn WHERE st.sex='1'AND sh.cscode=csn.cscode AND csn.chi_name LIKE'%程式設計%')AND sh.score>=60 AND st.student_no=sh.student_no AND st.depart_class=c.ClassNo))as ptds, "
+		+ "SUM((SELECT COUNT(*)FROM stmd st, ScoreHist sh, Csno csn WHERE st.sex='2'AND sh.cscode=csn.cscode AND csn.chi_name LIKE'%程式設計%' AND sh.score>=60 AND st.student_no=sh.student_no AND st.depart_class=c.ClassNo))as ptds2"
+		+ "FROM Class c, CODE_SCHOOL cs, CODE_DEPT cd, CODE_COLLEGE cc WHERE c.SchoolNo=cs.id AND cd.id=c.DeptNo AND cc.id=c.InstNo AND c.stds>0 ");
+		*/
+		StringBuilder sb=new StringBuilder("SELECT cc.name as inst_name, cs.name as school_name, cd.name as dept_name, c.ClassNo, SUM((SELECT COUNT(*)FROM stmd WHERE depart_class=c.ClassNo))as stds,"
+				+ "SUM((SELECT COUNT(*)FROM stmd st, ScoreHist sh, Csno csn WHERE st.sex='1'AND sh.cscode=csn.cscode AND csn.chi_name "
+				+ "LIKE'%程式設計%'AND sh.score>=60 AND st.student_no=sh.student_no AND st.depart_class=c.ClassNo))as ptds, SUM((SELECT "
+				+ "COUNT(*)FROM stmd st, ScoreHist sh, Csno csn WHERE st.sex='2'AND sh.cscode=csn.cscode AND csn.chi_name LIKE'%程式設計%'AND "
+				+ "sh.score>=60 AND st.student_no=sh.student_no AND st.depart_class=c.ClassNo))as ptds2 FROM Class c, CODE_SCHOOL cs, "
+				+ "CODE_DEPT cd, CODE_COLLEGE cc WHERE c.SchoolNo=cs.id AND cd.id=c.DeptNo AND cc.id=c.InstNo AND c.stds>0 ");
+				
 		
-		StringBuilder sb=new StringBuilder("SELECT cc.name as inst_name, cs.name as school_name, "
-		+ "cd.name as dept_name, c.ClassNo,SUM((SELECT COUNT(*)FROM stmd WHERE depart_class=c.ClassNo))"
-		+ "as stds,SUM((SELECT COUNT(*)FROM stmd st, ScoreHist sh, Csno csn WHERE sh.cscode=csn.cscode AND "
-		//+ "(csn.chi_name LIKE'%程式%'OR csn.chi_name LIKE'%計算機%'OR csn.chi_name LIKE'%軟體%'OR csn.chi_name LIKE'%邏輯%') AND "
-		+ "(csn.chi_name LIKE'%計算機%'OR csn.chi_name LIKE'%程式%') AND "
-		//+"c.ClassName NOT LIKE '%產%'AND c.ClassName NOT LIKE '%軍%' AND "
-		+ "sh.score>=80 AND st.student_no=sh.student_no AND "
-		+ "st.depart_class=c.ClassNo))as ptds FROM Class c, CODE_SCHOOL cs, CODE_DEPT cd, CODE_COLLEGE cc "
-		+ "WHERE c.SchoolNo=cs.id AND cd.id=c.DeptNo AND cc.id=c.InstNo AND c.stds>0 ");
 		if(!cno.equals(""))sb.append("AND c.CampusNo='"+cno+"'");
 		if(!sno.equals(""))sb.append("AND c.SchoolNo='"+sno+"'");
 		if(!dno.equals(""))sb.append("AND c.DeptNo='"+dno+"'");
 		if(!gno.equals(""))sb.append("AND c.Grade='"+gno+"'");
-		if(!zno.equals(""))sb.append("AND c.SeqNo='"+zno+"'");
-		
+		if(!zno.equals(""))sb.append("AND c.SeqNo='"+zno+"'");		
 		sb.append("GROUP BY c.InstNo, c.SchoolNo, c.DeptNo ORDER BY c.InstNo, c.SchoolNo, c.DeptNo");
 		//System.out.println(sb.toString());
 		List<Map>list=df.sqlGet(sb.toString());
-		int ptds, stds;
+		int ptds, ptds2, stds;
 		for(int i=0; i<list.size(); i++) {
 			stds=Integer.parseInt(String.valueOf(list.get(i).get("stds")));
 			ptds=Integer.parseInt(String.valueOf(list.get(i).get("ptds")));
+			ptds2=Integer.parseInt(String.valueOf(list.get(i).get("ptds2")));
 			out.println ("   <Row>");
 			out.println ("    <Cell><Data ss:Type='String'>"+year+"-"+term+"</Data></Cell>");
 			out.println ("    <Cell><Data ss:Type='String'>"+list.get(i).get("inst_name")+"</Data></Cell>");
 			out.println ("    <Cell><Data ss:Type='String'>"+list.get(i).get("dept_name")+"</Data></Cell>");
 			out.println ("    <Cell><Data ss:Type='String'>"+list.get(i).get("school_name")+"</Data></Cell>");
 			out.println ("    <Cell><Data ss:Type='String'>"+stds+"</Data></Cell>");
-			if(ptds>=stds) {
+			/*if(ptds>=stds) {
 				out.println ("    <Cell><Data ss:Type='Number'>"+stds+"</Data></Cell>");
 			}else {
 				out.println ("    <Cell><Data ss:Type='Number'>"+ptds+"</Data></Cell>");
-			}
-			
-			out.println ("   </Row>");
-			
-		}
-		
-		
-		
-		
-		
-		
+			}*/		
+			out.println ("    <Cell><Data ss:Type='Number'>"+ptds+"</Data></Cell>");
+			out.println ("    <Cell><Data ss:Type='Number'>"+ptds2+"</Data></Cell>");
+			out.println ("   </Row>");			
+		}		
 		out.println ("  </Table>");
 		out.println ("  <WorksheetOptions xmlns='urn:schemas-microsoft-com:office:excel'>");
 		out.println ("   <PageSetup>");
