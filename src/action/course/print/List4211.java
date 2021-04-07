@@ -91,12 +91,12 @@ public class List4211 extends BasePrintXmlAction{
 		+ "SUM((SELECT COUNT(*)FROM stmd st, ScoreHist sh, Csno csn WHERE st.sex='2'AND sh.cscode=csn.cscode AND csn.chi_name LIKE'%程式設計%' AND sh.score>=60 AND st.student_no=sh.student_no AND st.depart_class=c.ClassNo))as ptds2"
 		+ "FROM Class c, CODE_SCHOOL cs, CODE_DEPT cd, CODE_COLLEGE cc WHERE c.SchoolNo=cs.id AND cd.id=c.DeptNo AND cc.id=c.InstNo AND c.stds>0 ");
 		*/
-		StringBuilder sb=new StringBuilder("SELECT cc.name as inst_name, cs.name as school_name, cd.name as dept_name, c.ClassNo, SUM((SELECT COUNT(*)FROM stmd WHERE depart_class=c.ClassNo))as stds,"
-				+ "SUM((SELECT COUNT(*)FROM stmd st, ScoreHist sh, Csno csn WHERE st.sex='1'AND sh.cscode=csn.cscode AND csn.chi_name "
-				+ "LIKE'%程式設計%'AND sh.score>=60 AND st.student_no=sh.student_no AND st.depart_class=c.ClassNo))as ptds, SUM((SELECT "
-				+ "COUNT(*)FROM stmd st, ScoreHist sh, Csno csn WHERE st.sex='2'AND sh.cscode=csn.cscode AND csn.chi_name LIKE'%程式設計%'AND "
-				+ "sh.score>=60 AND st.student_no=sh.student_no AND st.depart_class=c.ClassNo))as ptds2 FROM Class c, CODE_SCHOOL cs, "
-				+ "CODE_DEPT cd, CODE_COLLEGE cc WHERE c.SchoolNo=cs.id AND cd.id=c.DeptNo AND cc.id=c.InstNo AND c.stds>0 ");
+		StringBuilder sb=new StringBuilder("SELECT cc.name as inst_name, cs.name as school_name, cd.name as dept_name,SUM((SELECT COUNT(*)FROM stmd WHERE depart_class=c.ClassNo))as stds,"+
+"SUM((SELECT COUNT(DISTINCT st.student_no) FROM stmd st, ScoreHist sh, Csno csn WHERE st.sex='1'AND sh.cscode=csn.cscode AND "+
+"csn.chi_name LIKE'%程式設計%'AND sh.score>=60 AND st.student_no=sh.student_no AND st.depart_class=c.ClassNo))as ptds,"+
+"SUM((SELECT COUNT(DISTINCT st.student_no) FROM stmd st, ScoreHist sh, Csno csn WHERE st.sex='2'AND sh.cscode=csn.cscode AND "+
+"csn.chi_name LIKE'%程式設計%'AND sh.score>=60 AND st.student_no=sh.student_no AND st.depart_class=c.ClassNo))as ptds2 "+
+"FROM Class c, CODE_SCHOOL cs, CODE_DEPT cd, CODE_COLLEGE cc WHERE c.SchoolNo=cs.id AND cd.id=c.DeptNo AND cc.id=c.InstNo AND c.stds>0 ");
 				
 		
 		if(!cno.equals(""))sb.append("AND c.CampusNo='"+cno+"'");
@@ -105,7 +105,7 @@ public class List4211 extends BasePrintXmlAction{
 		if(!gno.equals(""))sb.append("AND c.Grade='"+gno+"'");
 		if(!zno.equals(""))sb.append("AND c.SeqNo='"+zno+"'");		
 		sb.append("GROUP BY c.InstNo, c.SchoolNo, c.DeptNo ORDER BY c.InstNo, c.SchoolNo, c.DeptNo");
-		//System.out.println(sb.toString());
+		System.out.println(sb);
 		List<Map>list=df.sqlGet(sb.toString());
 		int ptds, ptds2, stds;
 		for(int i=0; i<list.size(); i++) {
